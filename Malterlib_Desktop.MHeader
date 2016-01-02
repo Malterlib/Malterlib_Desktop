@@ -1,0 +1,80 @@
+// Copyright © 2015 Hansoft AB 
+// Distributed under the MIT license, see license text in LICENSE.Malterlib
+
+Import "../Core/Lib_Malterlib.MTarget"
+
+%Group "{Malterlib}/{Lib_Malterlib_Desktop}"
+{
+	%Group Desktop
+	{
+		%Group Include
+		{
+			Compile.Type "C++"
+			{
+				!!DocumentationEnabled true
+			}
+			%File "Include/Mib/Desktop/^*"
+		}
+		%File "Source/*"
+		%Group Platform
+		{
+			%File "Source/Platform/*"
+			{
+				Compile.Disabled true
+				{
+					!PlatformFamily "@(PlatformFamilyFromImpFile)"
+				}
+			}
+		}
+		%Group Documentation
+		{
+			%File "Documentation/*"
+		}
+	}
+}
+
+
+Property
+{
+	MalterlibLibrary_Desktop true
+	{
+		&
+		{
+			MalterlibLibrary_Desktop ""
+			MalterlibLibrary_All true
+		}
+	}
+	MalterlibSubLibraries "Desktop;@(MalterlibSubLibraries)"
+	{
+		!!MalterlibLibrary_Desktop true
+	}
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_Desktop true
+	MalterlibIncludeRoots "@('Include'->MakeAbsolute());@(MalterlibIncludeRoots)"
+	{
+		!!MalterlibLibrary_Desktop true
+	}
+}
+
+%Group "{Test}/{Malterlib_Desktop}"
+{
+	%Group Tests
+	{
+		%File "Test/*"
+		%File "Test/Test_Malterlib_Desktop_DBus.cpp"
+		{
+			Compile.Disabled true
+			{
+				!PlatformFamily Linux
+			}
+		}
+	}
+}
+
+Property
+{
+	!!MalterlibEnableInternalTests true
+	
+	MalterlibTests "Malterlib_Desktop;@(MalterlibTests)"
+	MalterlibTestExtraGroups_Malterlib_Desktop "{Test}/{Malterlib_Desktop}"
+}
+
