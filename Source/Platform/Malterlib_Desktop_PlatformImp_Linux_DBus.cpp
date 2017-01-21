@@ -799,7 +799,7 @@ namespace NMib
 			if (!(mp_pLib && mp_pLib->f_OK()))
 				return false;
 			
-			if (NSys::fg_Process_GetEnvironmentVariable(NStr::CStr("DBUS_SESSION_BUS_ADDRESS")).f_IsEmpty())
+			if (fg_GetSys()->f_GetEnvironmentVariable("DBUS_SESSION_BUS_ADDRESS").f_IsEmpty())
 				return false;
 			return true;
 		}
