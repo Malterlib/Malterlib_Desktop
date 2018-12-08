@@ -34,7 +34,7 @@
 						uint64 				DBUS_TYPE_UINT64
 						bool 				DBUS_TYPE_BOOLEAN
 						CStr 				DBUS_TYPE_STRING
-						TCVector<uint8>		DBUS_TYPE_ARRAY of DBUS_TYPE_BYTE
+						CByteVector		DBUS_TYPE_ARRAY of DBUS_TYPE_BYTE
 						TCVector<CStr>		DBUS_TYPE_ARRAY of DBUS_TYPE_STRING
 
 					The DBus exception CDBusException is only thrown when some bad stuff does down.
@@ -57,7 +57,7 @@
 			NDBus::CMessage Msg(	NDBus::EMessageType_Method
 								, 	"com.malterlib.service"
 								, 	"/modules/test"
-								,	"com.hansoft.test"
+								,	"com.malterlib.test"
 								,	"testMethod"
 								,	DBus);
 
@@ -65,7 +65,7 @@
 			{
 				NDBus::CMessageWriter Writer(Msg);		
 
-				TCVector<uint8> lBytes;
+				CByteVector lBytes;
 				...
 
 				if (!Writer.f_AppendArgs( (uint32)1, CStr("Str"),  false, lBytes))
@@ -97,7 +97,7 @@
 				uint32 UInt32Var;
 				CStr StringVar;
 				bool bBoolVar;
-				TCVector<uint8> lBytesVar;
+				CByteVector lBytesVar;
 
 				if (!Reader.f_PopArgs( UInt32Var, StringVar, bBoolVar, lBytesVar))
 				{
@@ -313,7 +313,7 @@ namespace NMib
 		{
 		private:
 			NThread::CMutual mp_LibLock;
-			NPtr::TCUniquePointer<CDBusLibrary> mp_pLib;
+			NStorage::TCUniquePointer<CDBusLibrary> mp_pLib;
 
 			friend CMessage;
 			friend CError;
@@ -375,7 +375,7 @@ namespace NMib
 		bool CMessageWriter::f_AppendArg<NStr::CStrSecure>(NStr::CStrSecure const& _Value);
 
 		template<>
-		bool CMessageWriter::f_AppendArg<NContainer::TCVector<uint8>>(NContainer::TCVector<uint8> const& _Value);
+		bool CMessageWriter::f_AppendArg<NContainer::CByteVector>(NContainer::CByteVector const& _Value);
 
 		template<>
 		bool CMessageWriter::f_AppendArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> const& _Value);
@@ -434,7 +434,7 @@ namespace NMib
 		bool CMessageReader::f_PopArg<bool>(bool& _oValue);
 
 		template<>
-		bool CMessageReader::f_PopArg<NContainer::TCVector<uint8>>(NContainer::TCVector<uint8>& _oValue);
+		bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector& _oValue);
 
 		template<>
 		bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr>& _oValue);

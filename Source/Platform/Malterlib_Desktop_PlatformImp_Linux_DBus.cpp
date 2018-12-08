@@ -321,7 +321,7 @@ namespace NMib
 		}
 
 		template<>
-		bool CMessageWriter::f_AppendArg<NContainer::TCVector<uint8>>(NContainer::TCVector<uint8> const& _Value)
+		bool CMessageWriter::f_AppendArg<NContainer::CByteVector>(NContainer::CByteVector const& _Value)
 		{
 			char* pBytes = (char*)_Value.f_GetArray();
 			dbus_uint32_t Len = _Value.f_GetLen();
@@ -533,7 +533,7 @@ namespace NMib
 		}
 
 		template<>
-		bool CMessageReader::f_PopArg<NContainer::TCVector<uint8>>(NContainer::TCVector<uint8>& _oValue)
+		bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector& _oValue)
 		{
 			if (	mp_Lib.dbus_message_iter_get_arg_type(&mp_Iter) != DBUS_TYPE_ARRAY
 				||	mp_Lib.dbus_message_iter_get_element_type(&mp_Iter) != DBUS_TYPE_BYTE)
@@ -549,7 +549,7 @@ namespace NMib
 			mp_Lib.dbus_message_iter_get_fixed_array (&ArrayIter, &pBytes, &Len);
 
 			_oValue.f_SetLen(Len);
-			NMem::fg_MemCopy(_oValue.f_GetArray(), pBytes, Len);
+			NMemory::fg_MemCopy(_oValue.f_GetArray(), pBytes, Len);
 
 			mp_Lib.dbus_message_iter_next(&mp_Iter);
 

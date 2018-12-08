@@ -29,37 +29,37 @@ namespace
 
 			DMibTestSuite("Message_Method")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 			};
 
 			DMibTestSuite("Message_MethodReturn")
 			{
-				NDBus::CMessage Msg1(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg1(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 				Msg1.f_SetSerial(100);
 				NDBus::CMessage Msg2(NDBus::EMessageType_MethodReturn, Msg1, DBus);
 			};
 
 			DMibTestSuite("Message_Signal")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Signal, "/modules/test", "com.hansoft.test", "testSignal", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Signal, "/modules/test", "com.malterlib.test", "testSignal", DBus);
 			};
 
 			DMibTestSuite("Message_Error")
 			{
-				NDBus::CMessage Msg1(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg1(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 				Msg1.f_SetSerial(100);
-				NDBus::CMessage Msg2(NDBus::EMessageType_Error, Msg1, "com.hansoft.error", "TestErrorMessage", DBus);
+				NDBus::CMessage Msg2(NDBus::EMessageType_Error, Msg1, "com.malterlib.error", "TestErrorMessage", DBus);
 			};
 
 			DMibTestSuite("MessageWriter_AppendArg")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 
 				NDBus::CMessageWriter Writer(Msg);
 
-				NContainer::TCVector<uint8> lBytes;
+				NContainer::CByteVector lBytes;
 				lBytes.f_SetLen(32);
-				NMem::fg_MemClear(lBytes.f_GetArray(), 32);
+				NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
 
 				NContainer::TCVector<NStr::CStr> lStrings;
 				lStrings.f_Insert("One");
@@ -82,13 +82,13 @@ namespace
 
 			DMibTestSuite("MessageWriter_AppendArgs")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 
 				NDBus::CMessageWriter Writer(Msg);
 
-				NContainer::TCVector<uint8> lBytes;
+				NContainer::CByteVector lBytes;
 				lBytes.f_SetLen(32);
-				NMem::fg_MemClear(lBytes.f_GetArray(), 32);
+				NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
 
 				NContainer::TCVector<NStr::CStr> lStrings;
 				lStrings.f_Insert("One");
@@ -112,14 +112,14 @@ namespace
 
 			DMibTestSuite("MessageReader_PopArg")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 
 				{
 					NDBus::CMessageWriter Writer(Msg);
 
-					NContainer::TCVector<uint8> lBytes;
+					NContainer::CByteVector lBytes;
 					lBytes.f_SetLen(32);
-					NMem::fg_MemClear(lBytes.f_GetArray(), 32);
+					NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
 
 					NContainer::TCVector<NStr::CStr> lStrings;
 					lStrings.f_Insert("One");
@@ -155,7 +155,7 @@ namespace
 					uint64 UInt64Var = 100;
 					NStr::CStr StringVar = "Y";
 					bool bBoolVar = true;
-					NContainer::TCVector<uint8> lBytesVar;
+					NContainer::CByteVector lBytesVar;
 					NContainer::TCVector<NStr::CStr> lStringsVar;
 
 					DMibTest(DMibExpr(Reader.f_PopArg(UInt8Var)) == DMibExpr(true))(ETest_FailAndStop);				
@@ -180,9 +180,9 @@ namespace
 					DMibTest(DMibExpr(StringVar) == DMibExpr(NStr::CStr("X")));
 					DMibTest(DMibExpr(bBoolVar) == DMibExpr(false));
 					{
-						NContainer::TCVector<uint8> lExpectedBytes;
+						NContainer::CByteVector lExpectedBytes;
 						lExpectedBytes.f_SetLen(32);
-						NMem::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
+						NMemory::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
 						DMibTest(DMibExpr(lBytesVar) == DMibExpr(lExpectedBytes));
 					}
 					{
@@ -202,14 +202,14 @@ namespace
 
 			DMibTestSuite("MessageReader_PopArgs")
 			{
-				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.hansoft.service", "/modules/test", "com.hansoft.test", "testMethod", DBus);
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "com.malterlib.service", "/modules/test", "com.malterlib.test", "testMethod", DBus);
 
 				{
 					NDBus::CMessageWriter Writer(Msg);
 
-					NContainer::TCVector<uint8> lBytes;
+					NContainer::CByteVector lBytes;
 					lBytes.f_SetLen(32);
-					NMem::fg_MemClear(lBytes.f_GetArray(), 32);
+					NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
 
 					NContainer::TCVector<NStr::CStr> lStrings;
 					lStrings.f_Insert("One");
@@ -245,7 +245,7 @@ namespace
 					uint64 UInt64Var = 100;
 					NStr::CStr StringVar = "Y";
 					bool bBoolVar = true;
-					NContainer::TCVector<uint8> lBytesVar;
+					NContainer::CByteVector lBytesVar;
 					NContainer::TCVector<NStr::CStr> lStringsVar;
 
 					bool bRet2 = Reader.f_PopArgs(
@@ -272,9 +272,9 @@ namespace
 					DMibTest(DMibExpr(StringVar) == DMibExpr(NStr::CStr("X")));
 					DMibTest(DMibExpr(bBoolVar) == DMibExpr(false));
 					{
-						NContainer::TCVector<uint8> lExpectedBytes;
+						NContainer::CByteVector lExpectedBytes;
 						lExpectedBytes.f_SetLen(32);
-						NMem::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
+						NMemory::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
 						DMibTest(DMibExpr(lBytesVar) == DMibExpr(lExpectedBytes));
 					}
 
