@@ -185,7 +185,7 @@ namespace NMib::NDesktop
 		}
 	}
 
-	void CDesktopFileParser::f_Write(NContainer::TCVector<CDesktopGroup> const &_Desktop, bint _bMakeExecutable)
+	void CDesktopFileParser::f_Write(NContainer::TCVector<CDesktopGroup> const &_Desktop, bool _bMakeExecutable)
 	{
 		NContainer::CByteVector Contents = fp_ExportContents(_Desktop);
 

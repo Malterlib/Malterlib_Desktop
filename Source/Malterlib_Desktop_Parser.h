@@ -39,7 +39,7 @@ namespace NMib::NDesktop
 
 		bool f_Parse(NContainer::TCVector<CDesktopGroup> &_Desktop);
 		void f_Write();
-		void f_Write(NContainer::TCVector<CDesktopGroup> const &_Desktop, bint _bMakeExecutable);
+		void f_Write(NContainer::TCVector<CDesktopGroup> const &_Desktop, bool _bMakeExecutable);
 
 	protected:
 
