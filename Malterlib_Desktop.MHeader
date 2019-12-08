@@ -5,9 +5,9 @@ Import "../Core/Lib_Malterlib.MTarget"
 
 %Group "{Malterlib}/{Lib_Malterlib_Desktop}"
 {
-	%Group Desktop
+	%Group "Desktop"
 	{
-		%Group Include
+		%Group "Include"
 		{
 			Compile.Type "C++"
 			{
@@ -16,7 +16,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 			%File "Include/Mib/Desktop/^*"
 		}
 		%File "Source/*"
-		%Group Platform
+		%Group "Platform"
 		{
 			%File "Source/Platform/*"
 			{
@@ -26,7 +26,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 				}
 			}
 		}
-		%Group Documentation
+		%Group "Documentation"
 		{
 			%File "Documentation/*"
 		}
@@ -57,14 +57,14 @@ Property
 
 %Group "{Test}/{Malterlib_Desktop}"
 {
-	%Group Tests
+	%Group "Tests"
 	{
 		%File "Test/*"
 		%File "Test/Test_Malterlib_Desktop_DBus.cpp"
 		{
 			Compile.Disabled true
 			{
-				!PlatformFamily Linux
+				!PlatformFamily "Linux"
 			}
 		}
 	}
