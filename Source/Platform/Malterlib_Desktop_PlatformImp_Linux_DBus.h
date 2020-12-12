@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 /*
@@ -17,7 +17,7 @@
 						CDBusException
 						DMibDBusError
 
-	Comments:		You should know how DBus works before using this:	
+	Comments:		You should know how DBus works before using this:
 						https://en.wikipedia.org/wiki/D-Bus
 
 					You should use the spec & api ref as reference when fixing this:
@@ -46,11 +46,11 @@
 	Usage:
 
 			Also see Test_DBus.cpp for working example code.
-	
+
 			// Sub system setup
 			NDBus::CSystem DBus;
 
-			if (!DBus.f_IsOK())	
+			if (!DBus.f_IsOK())
 				return; // Could not load dbus dynamic lib.
 
 			// Message creation
@@ -63,7 +63,7 @@
 
 			// Writing a message
 			{
-				NDBus::CMessageWriter Writer(Msg);		
+				NDBus::CMessageWriter Writer(Msg);
 
 				CByteVector lBytes;
 				...
@@ -83,7 +83,7 @@
 				// Use Conn.f_GetLastError();
 			}
 
-			if (!Conn.f_BlockingSendWithReply(Msg, Reply, gc_DefaultTimeout)) 
+			if (!Conn.f_BlockingSendWithReply(Msg, Reply, gc_DefaultTimeout))
 			{
 				// Error
 				// Use Conn.f_GetLastError();
@@ -91,8 +91,8 @@
 
 			// Reading a message
 			{
-				NDBus::CMessageReader Reader(Reply);		
-				
+				NDBus::CMessageReader Reader(Reply);
+
 				// Assuming we get back what we sent out.
 				uint32 UInt32Var;
 				CStr StringVar;

@@ -5,6 +5,16 @@ Import "../Core/Lib_Malterlib.MTarget"
 
 %Group "{Malterlib}/{Lib_Malterlib_Desktop}"
 {
+	Compile
+	{
+		!!CompileDialect "C"
+
+		SearchPath "@(MalterlibSysRoot)/usr/include/dbus-1.0;@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include;@(Compile.SearchPath)"
+		{
+			!!PlatformFamily "Linux"
+		}
+	}
+
 	%Group "Desktop"
 	{
 		%Group "Include"
@@ -57,6 +67,16 @@ Property
 
 %Group "{Test}/{Malterlib_Desktop}"
 {
+	Compile
+	{
+		!!CompileDialect "C"
+
+		SearchPath "@(MalterlibSysRoot)/usr/include/dbus-1.0;@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include;@(Compile.SearchPath)"
+		{
+			!!PlatformFamily "Linux"
+		}
+	}
+
 	%Group "Tests"
 	{
 		%File "Test/*"
