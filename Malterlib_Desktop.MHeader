@@ -9,7 +9,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 	{
 		!!CompileDialect "C"
 
-		SearchPath "@(MalterlibSysRoot)/usr/include/dbus-1.0;@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include;@(Compile.SearchPath)"
+		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include`]
 		{
 			!!PlatformFamily "Linux"
 		}
@@ -32,7 +32,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 			{
 				Compile.Disabled true
 				{
-					!PlatformFamily "@(PlatformFamilyFromImpFile)"
+					!PlatformFamily PlatformFamilyFromImpFile
 				}
 			}
 		}
@@ -46,20 +46,13 @@ Import "../Core/Lib_Malterlib.MTarget"
 
 Property
 {
-	MalterlibLibrary_Desktop true
-	{
-		&
-		{
-			MalterlibLibrary_Desktop ""
-			MalterlibLibrary_All true
-		}
-	}
-	MalterlibSubLibraries "Desktop;@(MalterlibSubLibraries)"
+	MalterlibLibrary_Desktop define bool = MalterlibLibrary_All
+	MalterlibSubLibraries =+ "Desktop"
 	{
 		!!MalterlibLibrary_Desktop true
 	}
-//	MalterlibSubLibrarySeparate_Lib_Malterlib_Desktop true
-	MalterlibIncludeRoots "@('Include'->MakeAbsolute());@(MalterlibIncludeRoots)"
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_Desktop define bool = true
+	MalterlibIncludeRoots =+ "Include"->MakeAbsolute()
 	{
 		!!MalterlibLibrary_Desktop true
 	}
@@ -71,7 +64,7 @@ Property
 	{
 		!!CompileDialect "C"
 
-		SearchPath "@(MalterlibSysRoot)/usr/include/dbus-1.0;@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include;@(Compile.SearchPath)"
+		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include`]
 		{
 			!!PlatformFamily "Linux"
 		}
@@ -94,7 +87,7 @@ Property
 {
 	!!MalterlibEnableInternalTests true
 	
-	MalterlibTests "Malterlib_Desktop;@(MalterlibTests)"
-	MalterlibTestExtraGroups_Malterlib_Desktop "{Test}/{Malterlib_Desktop}"
+	MalterlibTests =+ "Malterlib_Desktop"
+	MalterlibTestExtraGroups_Malterlib_Desktop define [string] = ["{Test}/{Malterlib_Desktop}"]
 }
 
