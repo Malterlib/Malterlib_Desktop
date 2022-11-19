@@ -46,12 +46,12 @@ Import "../Core/Lib_Malterlib.MTarget"
 
 Property
 {
-	MalterlibLibrary_Desktop define bool = MalterlibLibrary_All
+	MalterlibLibrary_Desktop: bool = MalterlibLibrary_All
 	MalterlibSubLibraries =+ "Desktop"
 	{
 		!!MalterlibLibrary_Desktop true
 	}
-//	MalterlibSubLibrarySeparate_Lib_Malterlib_Desktop define bool = true
+//	MalterlibSubLibrarySeparate_Lib_Malterlib_Desktop: bool = true
 	MalterlibIncludeRoots =+ "Include"->MakeAbsolute()
 	{
 		!!MalterlibLibrary_Desktop true
@@ -88,6 +88,6 @@ Property
 	!!MalterlibEnableInternalTests true
 	
 	MalterlibTests =+ "Malterlib_Desktop"
-	MalterlibTestExtraGroups_Malterlib_Desktop define [string] = ["{Test}/{Malterlib_Desktop}"]
+	MalterlibTestExtraGroups_Malterlib_Desktop: [string] = ["{Test}/{Malterlib_Desktop}"]
 }
 
