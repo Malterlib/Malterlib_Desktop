@@ -8,40 +8,119 @@ namespace NMib::NDBus
 {
 	DMibImpErrorClassImplement(CDBusException);
 
-	DMibDefineDynamicLibraryClass(CDBusLibrary, NMib::EDLFlag_NoThrow | NMib::EDLFlag_NoAutoLoad, "libdbus-1.so,libdbus-1.so.3"
-									,	dbus_message_new_method_call
-									,	dbus_message_new_method_return
-									,	dbus_message_new_signal
-									,	dbus_message_new_error
-									,	dbus_message_unref
-									,	dbus_message_copy
-									,	dbus_message_get_type
-									,	dbus_message_iter_init_append
-									,	dbus_message_iter_append_basic
-									,	dbus_message_iter_open_container
-									,	dbus_message_iter_append_fixed_array
-									,	dbus_message_iter_close_container
-									,	dbus_message_iter_init
-									,	dbus_message_iter_get_arg_type
-									,	dbus_message_iter_get_basic
-									,	dbus_message_iter_next
-									,	dbus_message_iter_get_element_type
-									,	dbus_message_iter_get_fixed_array
-									,	dbus_message_iter_recurse
-									,	dbus_message_iter_has_next
-									,	dbus_message_set_serial 	// Only used for test code.
-									,	dbus_error_init
-									, 	dbus_error_free
-									,	dbus_error_is_set
-									,	dbus_move_error
-									,	dbus_connection_open
-									,	dbus_connection_open_private
-									,	dbus_connection_send_with_reply_and_block
-									,	dbus_connection_get_is_connected
-									,	dbus_connection_close
-									,	dbus_connection_unref
-									,	dbus_bus_get
-								);
+	struct CDBusLibrary final : public NMib::CDynamicLibraryUtility
+	{
+		constexpr CDBusLibrary()
+			: NMib::CDynamicLibraryUtility(NMib::NStr::gc_Str<"libdbus-1.so,libdbus-1.so.3">, EDLFlag_NoThrow)
+		{
+		}
+
+		decltype(&dbus_message_new_method_call) dbus_message_new_method_call = nullptr;
+		decltype(&dbus_message_new_method_return) dbus_message_new_method_return = nullptr;
+		decltype(&dbus_message_new_signal) dbus_message_new_signal = nullptr;
+		decltype(&dbus_message_new_error) dbus_message_new_error = nullptr;
+		decltype(&dbus_message_unref) dbus_message_unref = nullptr;
+		decltype(&dbus_message_copy) dbus_message_copy = nullptr;
+		decltype(&dbus_message_get_type) dbus_message_get_type = nullptr;
+		decltype(&dbus_message_iter_init_append) dbus_message_iter_init_append = nullptr;
+		decltype(&dbus_message_iter_append_basic) dbus_message_iter_append_basic = nullptr;
+		decltype(&dbus_message_iter_open_container) dbus_message_iter_open_container = nullptr;
+		decltype(&dbus_message_iter_append_fixed_array) dbus_message_iter_append_fixed_array = nullptr;
+		decltype(&dbus_message_iter_close_container) dbus_message_iter_close_container = nullptr;
+		decltype(&dbus_message_iter_init) dbus_message_iter_init = nullptr;
+		decltype(&dbus_message_iter_get_arg_type) dbus_message_iter_get_arg_type = nullptr;
+		decltype(&dbus_message_iter_get_basic) dbus_message_iter_get_basic = nullptr;
+		decltype(&dbus_message_iter_next) dbus_message_iter_next = nullptr;
+		decltype(&dbus_message_iter_get_element_type) dbus_message_iter_get_element_type = nullptr;
+		decltype(&dbus_message_iter_get_fixed_array) dbus_message_iter_get_fixed_array = nullptr;
+		decltype(&dbus_message_iter_recurse) dbus_message_iter_recurse = nullptr;
+		decltype(&dbus_message_iter_has_next) dbus_message_iter_has_next = nullptr;
+		decltype(&dbus_message_set_serial) dbus_message_set_serial = nullptr;
+		decltype(&dbus_error_init) dbus_error_init = nullptr;
+		decltype(&dbus_error_free) dbus_error_free = nullptr;
+		decltype(&dbus_error_is_set) dbus_error_is_set = nullptr;
+		decltype(&dbus_move_error) dbus_move_error = nullptr;
+		decltype(&dbus_connection_open) dbus_connection_open = nullptr;
+		decltype(&dbus_connection_open_private) dbus_connection_open_private = nullptr;
+		decltype(&dbus_connection_send_with_reply_and_block) dbus_connection_send_with_reply_and_block = nullptr;
+		decltype(&dbus_connection_get_is_connected) dbus_connection_get_is_connected = nullptr;
+		decltype(&dbus_connection_close) dbus_connection_close = nullptr;
+		decltype(&dbus_connection_unref) dbus_connection_unref = nullptr;
+		decltype(&dbus_bus_get) dbus_bus_get = nullptr;
+
+	protected:
+		void fp_ClearSymbols() override
+		{
+			dbus_message_new_method_call = nullptr;
+			dbus_message_new_method_return = nullptr;
+			dbus_message_new_signal = nullptr;
+			dbus_message_new_error = nullptr;
+			dbus_message_unref = nullptr;
+			dbus_message_copy = nullptr;
+			dbus_message_get_type = nullptr;
+			dbus_message_iter_init_append = nullptr;
+			dbus_message_iter_append_basic = nullptr;
+			dbus_message_iter_open_container = nullptr;
+			dbus_message_iter_append_fixed_array = nullptr;
+			dbus_message_iter_close_container = nullptr;
+			dbus_message_iter_init = nullptr;
+			dbus_message_iter_get_arg_type = nullptr;
+			dbus_message_iter_get_basic = nullptr;
+			dbus_message_iter_next = nullptr;
+			dbus_message_iter_get_element_type = nullptr;
+			dbus_message_iter_get_fixed_array = nullptr;
+			dbus_message_iter_recurse = nullptr;
+			dbus_message_iter_has_next = nullptr;
+			dbus_message_set_serial = nullptr;
+			dbus_error_init = nullptr;
+			dbus_error_free = nullptr;
+			dbus_error_is_set = nullptr;
+			dbus_move_error = nullptr;
+			dbus_connection_open = nullptr;
+			dbus_connection_open_private = nullptr;
+			dbus_connection_send_with_reply_and_block = nullptr;
+			dbus_connection_get_is_connected = nullptr;
+			dbus_connection_close = nullptr;
+			dbus_connection_unref = nullptr;
+			dbus_bus_get = nullptr;
+		}
+
+		void fp_FetchSymbols() override
+		{
+			fp_Fetch(dbus_message_new_method_call, "dbus_message_new_method_call");
+			fp_Fetch(dbus_message_new_method_return, "dbus_message_new_method_return");
+			fp_Fetch(dbus_message_new_signal, "dbus_message_new_signal");
+			fp_Fetch(dbus_message_new_error, "dbus_message_new_error");
+			fp_Fetch(dbus_message_unref, "dbus_message_unref");
+			fp_Fetch(dbus_message_copy, "dbus_message_copy");
+			fp_Fetch(dbus_message_get_type, "dbus_message_get_type");
+			fp_Fetch(dbus_message_iter_init_append, "dbus_message_iter_init_append");
+			fp_Fetch(dbus_message_iter_append_basic, "dbus_message_iter_append_basic");
+			fp_Fetch(dbus_message_iter_open_container, "dbus_message_iter_open_container");
+			fp_Fetch(dbus_message_iter_append_fixed_array, "dbus_message_iter_append_fixed_array");
+			fp_Fetch(dbus_message_iter_close_container, "dbus_message_iter_close_container");
+			fp_Fetch(dbus_message_iter_init, "dbus_message_iter_init");
+			fp_Fetch(dbus_message_iter_get_arg_type, "dbus_message_iter_get_arg_type");
+			fp_Fetch(dbus_message_iter_get_basic, "dbus_message_iter_get_basic");
+			fp_Fetch(dbus_message_iter_next, "dbus_message_iter_next");
+			fp_Fetch(dbus_message_iter_get_element_type, "dbus_message_iter_get_element_type");
+			fp_Fetch(dbus_message_iter_get_fixed_array, "dbus_message_iter_get_fixed_array");
+			fp_Fetch(dbus_message_iter_recurse, "dbus_message_iter_recurse");
+			fp_Fetch(dbus_message_iter_has_next, "dbus_message_iter_has_next");
+			fp_Fetch(dbus_message_set_serial, "dbus_message_set_serial");
+			fp_Fetch(dbus_error_init, "dbus_error_init");
+			fp_Fetch(dbus_error_free, "dbus_error_free");
+			fp_Fetch(dbus_error_is_set, "dbus_error_is_set");
+			fp_Fetch(dbus_move_error, "dbus_move_error");
+			fp_Fetch(dbus_connection_open, "dbus_connection_open");
+			fp_Fetch(dbus_connection_open_private, "dbus_connection_open_private");
+			fp_Fetch(dbus_connection_send_with_reply_and_block, "dbus_connection_send_with_reply_and_block");
+			fp_Fetch(dbus_connection_get_is_connected, "dbus_connection_get_is_connected");
+			fp_Fetch(dbus_connection_close, "dbus_connection_close");
+			fp_Fetch(dbus_connection_unref, "dbus_connection_unref");
+			fp_Fetch(dbus_bus_get, "dbus_bus_get");
+		}
+	};
 
 	//
 	// CMessage
