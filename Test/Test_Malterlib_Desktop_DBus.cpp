@@ -94,18 +94,21 @@ namespace
 				lStrings.f_Insert("One");
 				lStrings.f_Insert("Two");
 
-				bool bRet = Writer.f_AppendArgs(
-										(uint8)0
-									,	(int16)1
-									,	(uint16)2
-									, 	(int32)3
-									,	(uint32)4
-									,	(int64)5
-									,	(uint64)6
-									,	NStr::CStr("X")
-									,	false
-									, 	lBytes
-									,	lStrings);
+				bool bRet = Writer.f_AppendArgs
+					(
+						uint8)0
+						, (int16)1
+						, (uint16)2
+						, (int32)3
+						, (uint32)4
+						, (int64)5
+						, (uint64)6
+						, NStr::CStr("X")
+						, false
+						, lBytes
+						, lStrings
+					)
+				;
 
 				DMibTest(DMibExpr(bRet) == DMibExpr(true));
 			};
@@ -125,18 +128,21 @@ namespace
 					lStrings.f_Insert("One");
 					lStrings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs(
-											(uint8)0
-										,	(int16)1
-										,	(uint16)2
-										, 	(int32)3
-										,	(uint32)4
-										,	(int64)5
-										,	(uint64)6
-										,	NStr::CStr("X")
-										,	false
-										, 	lBytes
-										,	lStrings);
+					bool bRet = Writer.f_AppendArgs
+						(
+							(uint8)0
+							, (int16)1
+							, (uint16)2
+							, (int32)3
+							, (uint32)4
+							, (int64)5
+							, (uint64)6
+							, NStr::CStr("X")
+							, false
+							, lBytes
+							, lStrings
+						)
+					;
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -215,18 +221,21 @@ namespace
 					lStrings.f_Insert("One");
 					lStrings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs(
-											(uint8)0
-										,	(int16)1
-										,	(uint16)2
-										, 	(int32)3
-										,	(uint32)4
-										,	(int64)5
-										,	(uint64)6
-										,	NStr::CStr("X")
-										,	false
-										, 	lBytes
-										,	lStrings);
+					bool bRet = Writer.f_AppendArgs
+						(
+							(uint8)0
+							, (int16)1
+							, (uint16)2
+							, (int32)3
+							, (uint32)4
+							, (int64)5
+							, (uint64)6
+							, NStr::CStr("X")
+							, false
+							, lBytes
+							, lStrings
+						)
+					;
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -248,18 +257,21 @@ namespace
 					NContainer::CByteVector lBytesVar;
 					NContainer::TCVector<NStr::CStr> lStringsVar;
 
-					bool bRet2 = Reader.f_PopArgs(
-												UInt8Var
-											,	Int16Var
-											,	UInt16Var
-											,	Int32Var
-											,	UInt32Var
-											,	Int64Var
-											,	UInt64Var
-											,	StringVar
-											,	bBoolVar
-											,	lBytesVar
-											,	lStringsVar );
+					bool bRet2 = Reader.f_PopArgs
+						(
+							UInt8Var
+							, Int16Var
+							, UInt16Var
+							, Int32Var
+							, UInt32Var
+							, Int64Var
+							, UInt64Var
+							, StringVar
+							, bBoolVar
+							, lBytesVar
+							, lStringsVar
+						)
+					;
 
 					DMibTest(DMibExpr(bRet2) == DMibExpr(true)) (ETest_FailAndStop);
 					DMibTest(DMibExpr(UInt8Var) == DMibExpr(0));
@@ -295,12 +307,16 @@ namespace
 
 			DMibTestSuite("Connection")
 			{
-				NDBus::CMessage Msg(	NDBus::EMessageType_Method
-									,	"org.freedesktop.DBus"
-									,	"/"
-									,	"org.freedesktop.DBus"
-									, 	"GetId"
-									,	DBus);
+				NDBus::CMessage Msg
+					(
+						NDBus::EMessageType_Method
+						, "org.freedesktop.DBus"
+						, "/"
+						, "org.freedesktop.DBus"
+						, "GetId"
+						, DBus
+					)
+				;
 
 				NDBus::CConnection Connection(DBus);
 

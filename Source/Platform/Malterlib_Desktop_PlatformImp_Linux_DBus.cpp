@@ -126,7 +126,7 @@ namespace NMib::NDBus
 	// CMessage
 	//
 
-	CMessage::CMessage(CSystem& _System)
+	CMessage::CMessage(CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -134,12 +134,15 @@ namespace NMib::NDBus
 	}
 
 	// New method call message. _Type MUST == EMessageType_Method
-	CMessage::CMessage(		EMessageType _Type
-						,	char const* _pService
-						,	char const* _pPath
-						,	char const* _pInterface
-						,	char const* _pMethod
-						, 	CSystem& _System)
+	CMessage::CMessage
+		(
+			EMessageType _Type
+			, char const *_pService
+			, char const *_pPath
+			, char const *_pInterface
+			, char const *_pMethod
+			, CSystem &_System
+		)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -153,9 +156,12 @@ namespace NMib::NDBus
 	}
 
 	// New method return message. _Type MUST == EMessageType_MethodReturn
-	CMessage::CMessage(		EMessageType _Type
-						,	CMessage& _InReplyTo
-						, 	CSystem& _System)
+	CMessage::CMessage
+		(
+			EMessageType _Type
+			, CMessage &_InReplyTo
+			, CSystem &_System
+		)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -169,11 +175,14 @@ namespace NMib::NDBus
 	}
 
 	// New signal message. _Type MUST == EMessageType_Signal
-	CMessage::CMessage(		EMessageType _Type
-						,	char const* _pPath
-						,	char const* _pInterface
-						,	char const* _pName
-						, 	CSystem& _System)
+	CMessage::CMessage
+		(
+			EMessageType _Type
+			, char const *_pPath
+			, char const *_pInterface
+			, char const *_pName
+			, CSystem &_System
+		)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -187,11 +196,14 @@ namespace NMib::NDBus
 	}
 
 	// New error message. _Type MUST == EMessageType_Error
-	CMessage::CMessage(		EMessageType _Type
-						,	CMessage& _InReplyTo
-						,	char const* _pErrorName
-						, 	char const* _pErrorMessage
-						, 	CSystem& _System)
+	CMessage::CMessage
+		(
+			EMessageType _Type
+			, CMessage &_InReplyTo
+			, char const *_pErrorName
+			, char const *_pErrorMessage
+			, CSystem &_System
+		)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -204,7 +216,7 @@ namespace NMib::NDBus
 			DMibDBusError("Failed to create new error message.");
 	}
 
-	CMessage::CMessage(CMessage const& _ToCopy)
+	CMessage::CMessage(CMessage const &_ToCopy)
 		: mp_Lib(_ToCopy.mp_Lib)
 		, mp_pMsg(nullptr)
 	{
@@ -214,20 +226,20 @@ namespace NMib::NDBus
 			DMibDBusError("Failed to copy message.");
 	}
 
-	CMessage::CMessage(CMessage&& _ToMove)
+	CMessage::CMessage(CMessage &&_ToMove)
 		: mp_Lib(_ToMove.mp_Lib)
 		, mp_pMsg(_ToMove.mp_pMsg)
 	{
 		_ToMove.mp_pMsg = nullptr;
 	}
 
-	CMessage::CMessage(DBusMessage* _pMsg, CSystem& _System)
+	CMessage::CMessage(DBusMessage *_pMsg, CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(_pMsg)
 	{
 	}
 
-	CMessage::CMessage(DBusMessage* _pMsg, CDBusLibrary& _Lib)
+	CMessage::CMessage(DBusMessage* _pMsg, CDBusLibrary &_Lib)
 		: mp_Lib(_Lib)
 		, mp_pMsg(_pMsg)
 	{
@@ -240,7 +252,7 @@ namespace NMib::NDBus
 			mp_Lib.dbus_message_unref(mp_pMsg);
 	}
 
-	CMessage& CMessage::operator=(CMessage& _ToCopy)
+	CMessage& CMessage::operator=(CMessage &_ToCopy)
 	{
 		if (mp_pMsg)
 			mp_Lib.dbus_message_unref(mp_pMsg);
@@ -257,7 +269,7 @@ namespace NMib::NDBus
 		return *this;
 	}
 
-	CMessage& CMessage::operator=(CMessage&& _ToMove)
+	CMessage& CMessage::operator=(CMessage &&_ToMove)
 	{
 		if (mp_pMsg)
 			mp_Lib.dbus_message_unref(mp_pMsg);
@@ -831,12 +843,14 @@ namespace NMib::NDBus
 	{
 		CError Error(mp_Lib);
 
-		DBusMessage* pReply = mp_Lib.dbus_connection_send_with_reply_and_block(
-									mp_pConnection
-								,	_Message.mp_pMsg
-								, 	_TimeoutMillis
-								,	&Error.mp_Error
-			);
+		DBusMessage* pReply = mp_Lib.dbus_connection_send_with_reply_and_block
+			(
+				mp_pConnection
+				, _Message.mp_pMsg
+				, _TimeoutMillis
+				, &Error.mp_Error
+			)
+		;
 
 		if (!pReply)
 		{

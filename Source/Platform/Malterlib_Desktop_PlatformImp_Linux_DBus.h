@@ -25,15 +25,15 @@
 						libdbus: http://dbus.freedesktop.org/doc/api/html/
 
 					The following C++ types are mapped to dbus argument types:
-						uint8 				DBUS_TYPE_BYTE
+						uint8				DBUS_TYPE_BYTE
 						int16				DBUS_TYPE_INT16
-						uint16 				DBUS_TYPE_UINT16
+						uint16				DBUS_TYPE_UINT16
 						int32				DBUS_TYPE_INT32
-						uint32 				DBUS_TYPE_UINT32
+						uint32				DBUS_TYPE_UINT32
 						int64				DBUS_TYPE_INT64
-						uint64 				DBUS_TYPE_UINT64
-						bool 				DBUS_TYPE_BOOLEAN
-						CStr 				DBUS_TYPE_STRING
+						uint64				DBUS_TYPE_UINT64
+						bool				DBUS_TYPE_BOOLEAN
+						CStr				DBUS_TYPE_STRING
 						CByteVector		DBUS_TYPE_ARRAY of DBUS_TYPE_BYTE
 						TCVector<CStr>		DBUS_TYPE_ARRAY of DBUS_TYPE_STRING
 
@@ -54,12 +54,16 @@
 				return; // Could not load dbus dynamic lib.
 
 			// Message creation
-			NDBus::CMessage Msg(	NDBus::EMessageType_Method
-								, 	"com.malterlib.service"
-								, 	"/modules/test"
-								,	"com.malterlib.test"
-								,	"testMethod"
-								,	DBus);
+			NDBus::CMessage Msg
+				(
+					NDBus::EMessageType_Method
+					, "com.malterlib.service"
+					, "/modules/test"
+					, "com.malterlib.test"
+					, "testMethod"
+					, DBus
+				)
+			;
 
 			// Writing a message
 			{
@@ -158,31 +162,47 @@ namespace NMib::NDBus
 		// TODO: Move these into static methods?
 
 		// New method call message. _Type MUST == EMessageType_Method
-		CMessage(		EMessageType _Type
-					,	char const* _pService
-					,	char const* _pPath
-					,	char const* _pInterface
-					,	char const* _pMethod
-					, 	CSystem& _System);
+		CMessage
+			(
+				EMessageType _Type
+				, char const *_pService
+				, char const *_pPath
+				, char const *_pInterface
+				, char const *_pMethod
+				, CSystem &_System
+			)
+		;
 
 		// New method return message. _Type MUST == EMessageType_MethodReturn
-		CMessage(		EMessageType _Type
-					,	CMessage& _InReplyTo
-					, 	CSystem& _System);
+		CMessage
+			(
+				EMessageType _Type
+				, CMessage &_InReplyTo
+				, CSystem &_System
+			)
+		;
 
 		// New signal message. _Type MUST == EMessageType_Signal
-		CMessage(		EMessageType _Type
-					,	char const* _pPath
-					,	char const* _pInterface
-					,	char const* _pName
-					, 	CSystem& _System);
+		CMessage
+			(
+				EMessageType _Type
+				, char const *_pPath
+				, char const *_pInterface
+				, char const *_pName
+				, CSystem &_System
+			)
+		;
 
 		// New error message. _Type MUST == EMessageType_Error
-		CMessage(		EMessageType _Type
-					,	CMessage& _InReplyTo
-					,	char const* _pErrorName
-					, 	char const* _pErrorMessage
-					, 	CSystem& _System);
+		CMessage
+			(
+				EMessageType _Type
+				, CMessage &_InReplyTo
+				, char const *_pErrorName
+				, char const *_pErrorMessage
+				, CSystem &_System
+			)
+		;
 
 		CMessage(CMessage const& _ToCopy);
 		CMessage(CMessage&& _ToMove);
@@ -270,8 +290,8 @@ namespace NMib::NDBus
 
 	enum EDBusBus
 	{
-			EDBusBus_Session	// User specific bus
-		,	EDBusBus_System		// Machine specific bus
+		EDBusBus_Session	// User specific bus
+		,EDBusBus_System	// Machine specific bus
 	};
 
 	class CConnection
@@ -279,9 +299,10 @@ namespace NMib::NDBus
 	private:
 		enum EFlag
 		{
-				EFlag_None		= 0
-			,	EFlag_Private	= DMibBit(0)
+			EFlag_None = 0
+			, EFlag_Private = DMibBit(0)
 		};
+
 	private:
 		CDBusLibrary& mp_Lib;
 		DBusConnection* mp_pConnection;
@@ -324,7 +345,6 @@ namespace NMib::NDBus
 		bool f_IsOK();
 
 	};
-
 
 	//
 	// CMessageWriter Implementation
@@ -384,8 +404,7 @@ namespace NMib::NDBus
 	template<typename t_CFirst, typename... Args>
 	bool CMessageWriter::f_AppendArgs(t_CFirst const& _First, Args const& ... _Args)
 	{
-		return 		f_AppendArg<t_CFirst>(_First)
-				&&	f_AppendArgs(_Args...);
+		return f_AppendArg<t_CFirst>(_First) && f_AppendArgs(_Args...);
 	}
 
 	//
@@ -443,7 +462,6 @@ namespace NMib::NDBus
 	template<typename t_CFirst, typename... Args>
 	bool CMessageReader::f_PopArgs(t_CFirst& _oFirst, Args&... _oArgs)
 	{
-		return 		f_PopArg(_oFirst)
-				&&	f_PopArgs(_oArgs...);
+		return f_PopArg(_oFirst) && f_PopArgs(_oArgs...);
 	}
 }
