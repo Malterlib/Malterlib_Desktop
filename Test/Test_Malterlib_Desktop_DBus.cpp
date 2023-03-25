@@ -96,7 +96,7 @@ namespace
 
 				bool bRet = Writer.f_AppendArgs
 					(
-						uint8)0
+						(uint8)0
 						, (int16)1
 						, (uint16)2
 						, (int32)3
