@@ -9,7 +9,7 @@ Import "../Core/Lib_Malterlib.MTarget"
 	{
 		!!CompileDialect "C"
 
-		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include`]
+		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/dbus-1.0/include`]
 		{
 			!!PlatformFamily "Linux"
 		}
@@ -64,7 +64,7 @@ Property
 	{
 		!!CompileDialect "C"
 
-		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/@(MalterlibNativeClangArchitecture)-linux-gnu/dbus-1.0/include`]
+		SearchPath += [`@(MalterlibSysRoot)/usr/include/dbus-1.0`, `@(MalterlibSysRoot)/usr/lib/dbus-1.0/include`]
 		{
 			!!PlatformFamily "Linux"
 		}
