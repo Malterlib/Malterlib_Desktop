@@ -3,6 +3,14 @@
 
 #include "Malterlib_Desktop_Parser.h"
 
+namespace NMib
+{
+	namespace NSys
+	{
+		extern const ch8* g_LinuxProgramIdentifier;
+	}
+}
+
 namespace NMib::NDesktop
 {
 	CDesktopFileParser::CDesktopFileParser(NStr::CStr const &_Identifier, NStr::CStr const &_Path)
@@ -116,6 +124,8 @@ namespace NMib::NDesktop
 				ProgramName = NFile::CFile::fs_GetFile(NFile::CFile::fs_GetProgramPath());
 
 			DesktopEntry.f_SetValue("Name", ProgramName);
+			
+			DesktopEntry.f_SetValue("StartupWMClass", NMib::NSys::g_LinuxProgramIdentifier);
 
 			if (!mp_Exec.f_IsEmpty())
 				DesktopEntry.f_SetValue("Exec", mp_Exec);
