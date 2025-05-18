@@ -353,7 +353,7 @@ namespace NMib::NDBus
 	template<typename t_CType>
 	bool CMessageWriter::f_AppendArg(t_CType const& _Arg)
 	{
-		static_assert(NTraits::TCIsSame<t_CType, void>::mc_Value, "This type is not supported");
+		static_assert(NTraits::cIsSame<t_CType, void>, "This type is not supported");
 		return false;
 	}
 
@@ -414,7 +414,7 @@ namespace NMib::NDBus
 	template<typename t_CType>
 	bool CMessageReader::f_PopArg(t_CType& _oArg)
 	{
-		static_assert(NTraits::TCIsSame<t_CType, void>::mc_Value, "This type is not supported");
+		static_assert(NTraits::cIsSame<t_CType, void>, "This type is not supported");
 		return false;
 	}
 
