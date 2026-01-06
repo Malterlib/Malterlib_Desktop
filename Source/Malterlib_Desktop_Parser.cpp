@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include "Malterlib_Desktop_Parser.h"
@@ -124,7 +124,7 @@ namespace NMib::NDesktop
 				ProgramName = NFile::CFile::fs_GetFile(NFile::CFile::fs_GetProgramPath());
 
 			DesktopEntry.f_SetValue("Name", ProgramName);
-			
+
 			DesktopEntry.f_SetValue("StartupWMClass", NMib::NSys::g_LinuxProgramIdentifier);
 
 			if (!mp_Exec.f_IsEmpty())

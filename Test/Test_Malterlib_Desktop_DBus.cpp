@@ -1,4 +1,4 @@
-// Copyright © 2015 Hansoft AB 
+// Copyright © 2015 Hansoft AB
 // Distributed under the MIT license, see license text in LICENSE.Malterlib
 
 #include <Mib/Core/Core>
@@ -18,7 +18,7 @@ namespace
 		{
 			NDBus::CSystem DBus;
 			DBus.f_ReadyForUse();
-			
+
 			if (!DBus.f_IsOK())
 				return; // Not supported on this system
 
@@ -67,15 +67,15 @@ namespace
 
 				NStr::CStr StringVar("X");
 
-				DMibTest(DMibExpr(Writer.f_AppendArg((uint8)0)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((int16)1)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((uint16)2)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((int32)3)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((uint32)4)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((int64)5)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg((uint64)6)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);				
-				DMibTest(DMibExpr(Writer.f_AppendArg(false)) == DMibExpr(true))(ETest_FailAndStop);				
+				DMibTest(DMibExpr(Writer.f_AppendArg((uint8)0)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((int16)1)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((uint16)2)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((int32)3)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((uint32)4)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((int64)5)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg((uint64)6)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg(false)) == DMibExpr(true))(ETest_FailAndStop);
 				DMibTest(DMibExpr(Writer.f_AppendArg(lBytes)) == DMibExpr(true))(ETest_FailAndStop);
 				DMibTest(DMibExpr(Writer.f_AppendArg(lStrings)) == DMibExpr(true))(ETest_FailAndStop);
 			};
@@ -164,15 +164,15 @@ namespace
 					NContainer::CByteVector lBytesVar;
 					NContainer::TCVector<NStr::CStr> lStringsVar;
 
-					DMibTest(DMibExpr(Reader.f_PopArg(UInt8Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(Int16Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(UInt16Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(Int32Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(UInt32Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(Int64Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(UInt64Var)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);				
-					DMibTest(DMibExpr(Reader.f_PopArg(bBoolVar)) == DMibExpr(true))(ETest_FailAndStop);				
+					DMibTest(DMibExpr(Reader.f_PopArg(UInt8Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(Int16Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(UInt16Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(Int32Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(UInt32Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(Int64Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(UInt64Var)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(bBoolVar)) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(Reader.f_PopArg(lBytesVar)) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(Reader.f_PopArg(lStringsVar)) == DMibExpr(true))(ETest_FailAndStop);
 
@@ -194,10 +194,10 @@ namespace
 					{
 						NContainer::TCVector<NStr::CStr> lExpectedStrings;
 						lExpectedStrings.f_Insert("One");
-						lExpectedStrings.f_Insert("Two");						
+						lExpectedStrings.f_Insert("Two");
 						DMibTest(DMibExpr(lStringsVar) == DMibExpr(lExpectedStrings));
 					}
-					
+
 					DMibTest(DMibExpr(Reader.f_ArgAvailable()) == DMibExpr(false));
 
 					bool bRet3 = Reader.f_PopArgs( UInt32Var );
@@ -293,7 +293,7 @@ namespace
 					{
 						NContainer::TCVector<NStr::CStr> lExpectedStrings;
 						lExpectedStrings.f_Insert("One");
-						lExpectedStrings.f_Insert("Two");						
+						lExpectedStrings.f_Insert("Two");
 						DMibTest(DMibExpr(lStringsVar) == DMibExpr(lExpectedStrings));
 					}
 
@@ -327,10 +327,10 @@ namespace
 				NDBus::CMessage Reply(DBus);
 
 				bool bSentAndReceived = Connection.f_BlockingSendWithReply(Msg, Reply);
-				
+
 				DMibTest(DMibExpr(bSentAndReceived) == DMibExpr(true)) (ETest_FailAndStop);
 
-				
+
 				{
 					NDBus::CMessageReader Reader(Reply);
 
@@ -344,13 +344,13 @@ namespace
 				}
 
 				bool bClosed = Connection.f_Close();
-				
+
 				DMibTest(DMibExpr(bClosed) == DMibExpr(true));
 
 			};
 
 		}
-			
+
 	};
 
 	DMibTestRegister(CDBus_Tests, Malterlib::Desktop);
