@@ -113,10 +113,15 @@
 
 #include <Mib/Core/Core>
 #include <Mib/Core/DynamicLibrary>
+#include <Mib/Storage/Variant>
+#include <Mib/Container/Map>
 
 extern "C"
 {
-	#include "dbus/dbus.h" // TODO: Hide completely?
+	typedef struct DBusMessage DBusMessage;
+	typedef struct DBusMessageIter DBusMessageIter;
+	typedef struct DBusError DBusError;
+	typedef struct DBusConnection DBusConnection;
 }
 
 #define DMibDBusError(_Msg) DMibImpError(CDBusException, _Msg);
@@ -124,6 +129,16 @@ extern "C"
 namespace NMib::NDBus
 {
 	DMibImpErrorClassDefine(CDBusException, NException::CException);
+
+	// D-Bus variant type that can hold common D-Bus basic types
+	// Used for reading 'v' (variant) type arguments
+	using CDBusVariant = NStorage::TCVariant<bool, uint8, int16, uint16, int32, uint32, int64, uint64, fp64, NStr::CStr>;
+
+	// D-Bus dict type for reading a{sv} (dict of string to variant)
+	using CDBusStringVariantDict = NContainer::TCMap<NStr::CStr, CDBusVariant>;
+
+	// D-Bus dict type for reading a{ta{sv}} (dict of uint64 to dict of string to variant)
+	using CDBusUInt64DictDict = NContainer::TCMap<uint64, CDBusStringVariantDict>;
 
 	struct CDBusLibrary;
 
@@ -213,6 +228,11 @@ namespace NMib::NDBus
 
 		EMessageType f_GetType() const;
 
+		// For checking received signals
+		char const* f_GetInterface() const;
+		char const* f_GetMember() const;
+		char const* f_GetPath() const;
+
 		void f_SetSerial(uint32 _Serial); // Only used for testing, to pretend to have been sent.
 
 	};
@@ -220,8 +240,8 @@ namespace NMib::NDBus
 	class CMessageWriter
 	{
 	private:
-		CDBusLibrary& mp_Lib;
-		DBusMessageIter mp_Iter;
+		struct CInternal;
+		NStorage::TCUniquePointer<CInternal> mp_pInternal;
 
 	public:
 		CMessageWriter(CMessage& _Message);
@@ -240,8 +260,8 @@ namespace NMib::NDBus
 	class CMessageReader
 	{
 	private:
-		CDBusLibrary& mp_Lib;
-		DBusMessageIter mp_Iter;
+		struct CInternal;
+		NStorage::TCUniquePointer<CInternal> mp_pInternal;
 
 	public:
 		CMessageReader(CMessage const& _Message);
@@ -261,8 +281,8 @@ namespace NMib::NDBus
 	class CError
 	{
 	private:
-		CDBusLibrary& mp_Lib;
-		DBusError mp_Error;
+		struct CInternal;
+		NStorage::TCUniquePointer<CInternal> mp_pInternal;
 
 		friend CConnection;
 
@@ -323,6 +343,19 @@ namespace NMib::NDBus
 		bool f_Close();
 
 		bool f_BlockingSendWithReply(CMessage& _Message, CMessage& _oReply, int _TimeoutMillis = gc_DefaultTimeout);
+
+		// Subscribe to D-Bus signals matching the given rule
+		// Example match rule: "type='signal',interface='se.unbroken.Input.WindowMonitor',member='FocusChanged'"
+		bool f_AddMatch(char const* _pMatchRule);
+
+		// Block until a message is available, then return it
+		// Returns false on error or disconnect, true if message received
+		// _TimeoutMillis: -1 for infinite wait, 0 for non-blocking, >0 for timeout in ms
+		bool f_BlockingPopMessage(CMessage& _oMessage, int _TimeoutMillis = gc_DefaultTimeout);
+
+		// Get the underlying Unix file descriptor for use with select()/poll()
+		// Returns -1 if not available
+		int f_GetUnixFd() const;
 
 	};
 
@@ -453,6 +486,15 @@ namespace NMib::NDBus
 
 	template<>
 	bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr>& _oValue);
+
+	template<>
+	bool CMessageReader::f_PopArg<CDBusVariant>(CDBusVariant& _oValue);
+
+	template<>
+	bool CMessageReader::f_PopArg<CDBusStringVariantDict>(CDBusStringVariantDict& _oValue);
+
+	template<>
+	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict& _oValue);
 
 	bool CMessageReader::f_PopArgs()
 	{
