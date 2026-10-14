@@ -8,7 +8,6 @@ namespace NMib::NDesktop
 	class CDesktopFileParser
 	{
 	public:
-
 		CDesktopFileParser(NStr::CStr const &_Identifier, NStr::CStr const &_Path);
 		~CDesktopFileParser();
 
@@ -42,7 +41,6 @@ namespace NMib::NDesktop
 		void f_Write(NContainer::TCVector<CDesktopGroup> const &_Desktop, bool _bMakeExecutable);
 
 	protected:
-
 		NContainer::CByteVector fp_ExportContents(NContainer::TCVector<CDesktopGroup> const &_Desktop);
 		static NStr::CStr fsp_ConvertToDesktopFileEntry(NStr::CStr const &_Key, NStr::CStr const &_Value);
 		static NStr::CStr fsp_MakeValidAction(NStr::CStr const &_Action);
@@ -60,5 +58,5 @@ namespace NMib::NDesktop
 }
 
 #ifndef DMibPNoShortCuts
-	using namespace NMib::NDesktop;
+using namespace NMib::NDesktop;
 #endif

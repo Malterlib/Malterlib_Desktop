@@ -6,7 +6,7 @@
 
 extern "C"
 {
-	#include <dbus/dbus.h>
+#include <dbus/dbus.h>
 }
 
 namespace NMib::NDBus
@@ -159,19 +159,10 @@ namespace NMib::NDBus
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
-
 	}
 
 	// New method call message. _Type MUST == EMessageType_Method
-	CMessage::CMessage
-		(
-			EMessageType _Type
-			, char const *_pService
-			, char const *_pPath
-			, char const *_pInterface
-			, char const *_pMethod
-			, CSystem &_System
-		)
+	CMessage::CMessage(EMessageType _Type, char const *_pService, char const *_pPath, char const *_pInterface, char const *_pMethod, CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -185,12 +176,7 @@ namespace NMib::NDBus
 	}
 
 	// New method return message. _Type MUST == EMessageType_MethodReturn
-	CMessage::CMessage
-		(
-			EMessageType _Type
-			, CMessage &_InReplyTo
-			, CSystem &_System
-		)
+	CMessage::CMessage(EMessageType _Type, CMessage &_InReplyTo, CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -204,14 +190,7 @@ namespace NMib::NDBus
 	}
 
 	// New signal message. _Type MUST == EMessageType_Signal
-	CMessage::CMessage
-		(
-			EMessageType _Type
-			, char const *_pPath
-			, char const *_pInterface
-			, char const *_pName
-			, CSystem &_System
-		)
+	CMessage::CMessage(EMessageType _Type, char const *_pPath, char const *_pInterface, char const *_pName, CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -225,14 +204,7 @@ namespace NMib::NDBus
 	}
 
 	// New error message. _Type MUST == EMessageType_Error
-	CMessage::CMessage
-		(
-			EMessageType _Type
-			, CMessage &_InReplyTo
-			, char const *_pErrorName
-			, char const *_pErrorMessage
-			, CSystem &_System
-		)
+	CMessage::CMessage(EMessageType _Type, CMessage &_InReplyTo, char const *_pErrorName, char const *_pErrorMessage, CSystem &_System)
 		: mp_Lib(*_System.mp_pLib)
 		, mp_pMsg(nullptr)
 	{
@@ -249,7 +221,7 @@ namespace NMib::NDBus
 		: mp_Lib(_ToCopy.mp_Lib)
 		, mp_pMsg(nullptr)
 	{
-		mp_pMsg = mp_Lib.dbus_message_copy( const_cast<DBusMessage*>(_ToCopy.mp_pMsg) );
+		mp_pMsg = mp_Lib.dbus_message_copy(const_cast<DBusMessage *>(_ToCopy.mp_pMsg));
 
 		if (!mp_pMsg)
 			DMibDBusError("Failed to copy message.");
@@ -268,12 +240,11 @@ namespace NMib::NDBus
 	{
 	}
 
-	CMessage::CMessage(DBusMessage* _pMsg, CDBusLibrary &_Lib)
+	CMessage::CMessage(DBusMessage *_pMsg, CDBusLibrary &_Lib)
 		: mp_Lib(_Lib)
 		, mp_pMsg(_pMsg)
 	{
 	}
-
 
 	CMessage::~CMessage()
 	{
@@ -281,14 +252,14 @@ namespace NMib::NDBus
 			mp_Lib.dbus_message_unref(mp_pMsg);
 	}
 
-	CMessage& CMessage::operator=(CMessage &_ToCopy)
+	CMessage &CMessage::operator = (CMessage &_ToCopy)
 	{
 		if (mp_pMsg)
 			mp_Lib.dbus_message_unref(mp_pMsg);
 
 		if (_ToCopy.mp_pMsg)
 		{
-			mp_pMsg = mp_Lib.dbus_message_copy( const_cast<DBusMessage*>(_ToCopy.mp_pMsg) );
+			mp_pMsg = mp_Lib.dbus_message_copy(const_cast<DBusMessage *>(_ToCopy.mp_pMsg));
 			if (!mp_pMsg)
 				DMibDBusError("Failed to copy message.");
 		}
@@ -298,7 +269,7 @@ namespace NMib::NDBus
 		return *this;
 	}
 
-	CMessage& CMessage::operator=(CMessage &&_ToMove)
+	CMessage &CMessage::operator = (CMessage &&_ToMove)
 	{
 		if (mp_pMsg)
 			mp_Lib.dbus_message_unref(mp_pMsg);
@@ -309,24 +280,18 @@ namespace NMib::NDBus
 		return *this;
 	}
 
-
 	EMessageType CMessage::f_GetType() const
 	{
 		if (!mp_pMsg)
 			return EMessageType_Unknown;
 
-		switch(mp_Lib.dbus_message_get_type(mp_pMsg))
+		switch (mp_Lib.dbus_message_get_type(mp_pMsg))
 		{
-			case DBUS_MESSAGE_TYPE_METHOD_CALL:
-				return EMessageType_Method;
-			case DBUS_MESSAGE_TYPE_METHOD_RETURN:
-				return EMessageType_MethodReturn;
-			case DBUS_MESSAGE_TYPE_ERROR:
-				return EMessageType_Error;
-			case DBUS_MESSAGE_TYPE_SIGNAL:
-				return EMessageType_Signal;
-			default:
-				return EMessageType_Unknown;
+		case DBUS_MESSAGE_TYPE_METHOD_CALL: return EMessageType_Method;
+		case DBUS_MESSAGE_TYPE_METHOD_RETURN: return EMessageType_MethodReturn;
+		case DBUS_MESSAGE_TYPE_ERROR: return EMessageType_Error;
+		case DBUS_MESSAGE_TYPE_SIGNAL: return EMessageType_Signal;
+		default: return EMessageType_Unknown;
 		}
 	}
 
@@ -336,21 +301,21 @@ namespace NMib::NDBus
 			mp_Lib.dbus_message_set_serial(mp_pMsg, _Serial);
 	}
 
-	char const* CMessage::f_GetInterface() const
+	char const *CMessage::f_GetInterface() const
 	{
 		if (!mp_pMsg)
 			return nullptr;
 		return mp_Lib.dbus_message_get_interface(mp_pMsg);
 	}
 
-	char const* CMessage::f_GetMember() const
+	char const *CMessage::f_GetMember() const
 	{
 		if (!mp_pMsg)
 			return nullptr;
 		return mp_Lib.dbus_message_get_member(mp_pMsg);
 	}
 
-	char const* CMessage::f_GetPath() const
+	char const *CMessage::f_GetPath() const
 	{
 		if (!mp_pMsg)
 			return nullptr;
@@ -372,7 +337,7 @@ namespace NMib::NDBus
 		DBusMessageIter mp_Iter;
 	};
 
-	CMessageWriter::CMessageWriter(CMessage& _Message)
+	CMessageWriter::CMessageWriter(CMessage &_Message)
 		: mp_pInternal(fg_Construct(_Message))
 	{
 		mp_pInternal->mp_Lib.dbus_message_iter_init_append(_Message.mp_pMsg, &mp_pInternal->mp_Iter);
@@ -382,98 +347,96 @@ namespace NMib::NDBus
 	{
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<uint8>(uint8  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<uint8>(uint8 const &_Value)
 	{
 		char Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_BYTE, &Value) ? true : false;
 	}
 
-
-	template<>
-	bool CMessageWriter::f_AppendArg<int16>(int16  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<int16>(int16 const &_Value)
 	{
 		dbus_int16_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_INT16, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<uint16>(uint16  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<uint16>(uint16 const &_Value)
 	{
 		dbus_uint16_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_UINT16, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<int32>(int32  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<int32>(int32 const &_Value)
 	{
 		dbus_int32_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_INT32, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<uint32>(uint32  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<uint32>(uint32 const &_Value)
 	{
 		dbus_uint32_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_UINT32, &Value) ? true : false;
 	}
 
-
-	template<>
-	bool CMessageWriter::f_AppendArg<int64>(int64  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<int64>(int64 const &_Value)
 	{
 		dbus_int64_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_INT64, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<uint64>(uint64  const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<uint64>(uint64 const &_Value)
 	{
 		dbus_uint64_t Value = _Value;
 
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_UINT64, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<char const*>(char const* const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<char const *>(char const * const &_Value)
 	{
 		// TODO: Encoding
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_STRING, &_Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<NStr::CStr>(NStr::CStr const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<NStr::CStr>(NStr::CStr const &_Value)
 	{
 		// TODO: Encoding
-		const char* pValue = _Value.f_GetStr();
+		char const *pValue = _Value.f_GetStr();
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_STRING, &pValue) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<NStr::CStrSecure>(NStr::CStrSecure const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<NStr::CStrSecure>(NStr::CStrSecure const &_Value)
 	{
 		// TODO: Encoding
-		const char* pValue = _Value.f_GetStr();
+		char const *pValue = _Value.f_GetStr();
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_STRING, &pValue) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<bool>(bool const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<bool>(bool const &_Value)
 	{
 		dbus_int32_t Value = _Value;
 		return mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&mp_pInternal->mp_Iter, DBUS_TYPE_BOOLEAN, &Value) ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<NContainer::CByteVector>(NContainer::CByteVector const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<NContainer::CByteVector>(NContainer::CByteVector const &_Value)
 	{
-		char* pBytes = (char*)_Value.f_GetArray();
+		char *pBytes = (char *)_Value.f_GetArray();
 		dbus_uint32_t Len = _Value.f_GetLen();
 
 		dbus_bool_t bRet;
@@ -484,14 +447,14 @@ namespace NMib::NDBus
 		{
 			bRet = mp_pInternal->mp_Lib.dbus_message_iter_append_fixed_array(&ArrayIter, DBUS_TYPE_BYTE, &pBytes, Len);
 
-			bRet = bRet &&  mp_pInternal->mp_Lib.dbus_message_iter_close_container(&mp_pInternal->mp_Iter, &ArrayIter);
+			bRet = bRet && mp_pInternal->mp_Lib.dbus_message_iter_close_container(&mp_pInternal->mp_Iter, &ArrayIter);
 		}
 
 		return bRet ? true : false;
 	}
 
-	template<>
-	bool CMessageWriter::f_AppendArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> const& _Value)
+	template <>
+	bool CMessageWriter::f_AppendArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> const &_Value)
 	{
 		dbus_bool_t bRet;
 		DBusMessageIter ArrayIter;
@@ -499,16 +462,13 @@ namespace NMib::NDBus
 		bRet = mp_pInternal->mp_Lib.dbus_message_iter_open_container(&mp_pInternal->mp_Iter, DBUS_TYPE_ARRAY, "s", &ArrayIter);
 		if (bRet)
 		{
-
-			for (auto StrIter = _Value.f_GetIterator()
-				;StrIter && bRet
-				;++StrIter)
+			for (auto StrIter = _Value.f_GetIterator(); StrIter && bRet; ++StrIter)
 			{
-				const char* pValue = (*StrIter).f_GetStr();
+				char const *pValue = (*StrIter).f_GetStr();
 				bRet = bRet && (mp_pInternal->mp_Lib.dbus_message_iter_append_basic(&ArrayIter, DBUS_TYPE_STRING, &pValue) ? true : false);
 			}
 
-			bRet = bRet &&  mp_pInternal->mp_Lib.dbus_message_iter_close_container(&mp_pInternal->mp_Iter, &ArrayIter);
+			bRet = bRet && mp_pInternal->mp_Lib.dbus_message_iter_close_container(&mp_pInternal->mp_Iter, &ArrayIter);
 		}
 
 		return bRet ? true : false;
@@ -529,7 +489,7 @@ namespace NMib::NDBus
 		DBusMessageIter mp_Iter;
 	};
 
-	CMessageReader::CMessageReader(CMessage const& _Message)
+	CMessageReader::CMessageReader(CMessage const &_Message)
 		: mp_pInternal(fg_Construct(_Message))
 	{
 		mp_pInternal->mp_Lib.dbus_message_iter_init(_Message.mp_pMsg, &mp_pInternal->mp_Iter);
@@ -537,11 +497,10 @@ namespace NMib::NDBus
 
 	CMessageReader::~CMessageReader()
 	{
-
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<uint8>(uint8& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<uint8>(uint8 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_BYTE)
 			return false;
@@ -555,8 +514,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<int16>(int16& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<int16>(int16 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_INT16)
 			return false;
@@ -570,8 +529,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<uint16>(uint16& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<uint16>(uint16 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_UINT16)
 			return false;
@@ -585,8 +544,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<int32>(int32& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<int32>(int32 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_INT32)
 			return false;
@@ -600,8 +559,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<uint32>(uint32& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<uint32>(uint32 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_UINT32)
 			return false;
@@ -615,9 +574,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-
-	template<>
-	bool CMessageReader::f_PopArg<int64>(int64& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<int64>(int64 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_INT64)
 			return false;
@@ -631,8 +589,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<uint64>(uint64& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<uint64>(uint64 &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_UINT64)
 			return false;
@@ -646,8 +604,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<NStr::CStr>(NStr::CStr& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<NStr::CStr>(NStr::CStr &_oValue)
 	{
 		// TODO: Encoding
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_STRING)
@@ -662,8 +620,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<NStr::CStrSecure>(NStr::CStrSecure& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<NStr::CStrSecure>(NStr::CStrSecure &_oValue)
 	{
 		// TODO: Encoding
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_STRING)
@@ -678,8 +636,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<bool>(bool& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<bool>(bool &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_BOOLEAN)
 			return false;
@@ -693,21 +651,26 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector &_oValue)
 	{
-		if (	mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY
-			||	mp_pInternal->mp_Lib.dbus_message_iter_get_element_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_BYTE)
+		if
+		(
+			mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY
+			|| mp_pInternal->mp_Lib.dbus_message_iter_get_element_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_BYTE
+		)
+		{
 			return false;
+		}
 
 		DBusMessageIter ArrayIter;
 
 		mp_pInternal->mp_Lib.dbus_message_iter_recurse(&mp_pInternal->mp_Iter, &ArrayIter);
 
-		char* pBytes;
+		char *pBytes;
 		int Len;
 
-		mp_pInternal->mp_Lib.dbus_message_iter_get_fixed_array (&ArrayIter, &pBytes, &Len);
+		mp_pInternal->mp_Lib.dbus_message_iter_get_fixed_array(&ArrayIter, &pBytes, &Len);
 
 		_oValue.f_SetLen(Len);
 		NMemory::fg_MemCopy(_oValue.f_GetArray(), pBytes, Len);
@@ -717,12 +680,17 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr>& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> &_oValue)
 	{
-		if (	mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY
-			||	mp_pInternal->mp_Lib.dbus_message_iter_get_element_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_STRING)
+		if
+		(
+			mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY
+			|| mp_pInternal->mp_Lib.dbus_message_iter_get_element_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_STRING
+		)
+		{
 			return false;
+		}
 
 		DBusMessageIter ArrayIter;
 
@@ -733,7 +701,7 @@ namespace NMib::NDBus
 		while (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&ArrayIter) == DBUS_TYPE_STRING)
 		{
 			mp_pInternal->mp_Lib.dbus_message_iter_get_basic(&ArrayIter, &pValue);
-			_oValue.f_Insert( NStr::CStr(pValue) );
+			_oValue.f_Insert(NStr::CStr(pValue));
 			mp_pInternal->mp_Lib.dbus_message_iter_next(&ArrayIter);
 		}
 
@@ -744,7 +712,7 @@ namespace NMib::NDBus
 
 	bool CMessageReader::f_ArgAvailable()
 	{
-		return mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_INVALID;;
+		return mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_INVALID;
 	}
 
 	namespace
@@ -756,81 +724,81 @@ namespace NMib::NDBus
 
 			switch (Type)
 			{
-				case DBUS_TYPE_BOOLEAN:
+			case DBUS_TYPE_BOOLEAN:
 				{
 					dbus_bool_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (bool)Value;
 					return true;
 				}
-				case DBUS_TYPE_BYTE:
+			case DBUS_TYPE_BYTE:
 				{
 					char Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (uint8)Value;
 					return true;
 				}
-				case DBUS_TYPE_INT16:
+			case DBUS_TYPE_INT16:
 				{
 					dbus_int16_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (int16)Value;
 					return true;
 				}
-				case DBUS_TYPE_UINT16:
+			case DBUS_TYPE_UINT16:
 				{
 					dbus_uint16_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (uint16)Value;
 					return true;
 				}
-				case DBUS_TYPE_INT32:
+			case DBUS_TYPE_INT32:
 				{
 					dbus_int32_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (int32)Value;
 					return true;
 				}
-				case DBUS_TYPE_UINT32:
+			case DBUS_TYPE_UINT32:
 				{
 					dbus_uint32_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (uint32)Value;
 					return true;
 				}
-				case DBUS_TYPE_INT64:
+			case DBUS_TYPE_INT64:
 				{
 					dbus_int64_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (int64)Value;
 					return true;
 				}
-				case DBUS_TYPE_UINT64:
+			case DBUS_TYPE_UINT64:
 				{
 					dbus_uint64_t Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (uint64)Value;
 					return true;
 				}
-				case DBUS_TYPE_DOUBLE:
+			case DBUS_TYPE_DOUBLE:
 				{
 					double Value;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &Value);
 					_oValue = (fp64)Value;
 					return true;
 				}
-				case DBUS_TYPE_STRING:
-				case DBUS_TYPE_OBJECT_PATH:
+			case DBUS_TYPE_STRING:
+			case DBUS_TYPE_OBJECT_PATH:
 				{
 					char *pValue;
 					_Lib.dbus_message_iter_get_basic(&_VariantIter, &pValue);
 					_oValue = NStr::CStr(pValue);
 					return true;
 				}
-				default:
-					// Unsupported variant type - store empty string as fallback
-					_oValue = NStr::CStr();
-					return true;
+			default:
+				// Unsupported variant type - store empty string as fallback
+				_oValue = NStr::CStr();
+				return true;
 			}
 		}
 
@@ -874,8 +842,8 @@ namespace NMib::NDBus
 		}
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<CDBusVariant>(CDBusVariant& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<CDBusVariant>(CDBusVariant &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_VARIANT)
 			return false;
@@ -890,8 +858,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<CDBusStringVariantDict>(CDBusStringVariantDict& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<CDBusStringVariantDict>(CDBusStringVariantDict &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY)
 			return false;
@@ -906,8 +874,8 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template<>
-	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict& _oValue)
+	template <>
+	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict &_oValue)
 	{
 		if (mp_pInternal->mp_Lib.dbus_message_iter_get_arg_type(&mp_pInternal->mp_Iter) != DBUS_TYPE_ARRAY)
 			return false;
@@ -990,7 +958,7 @@ namespace NMib::NDBus
 		mp_pInternal->mp_Lib.dbus_error_free(&mp_pInternal->mp_Error);
 	}
 
-	CError& CError::operator=(CError&& _ToMove)
+	CError &CError::operator = (CError &&_ToMove)
 	{
 		mp_pInternal->mp_Lib.dbus_error_free(&mp_pInternal->mp_Error);
 		mp_pInternal->mp_Lib.dbus_move_error(&_ToMove.mp_pInternal->mp_Error, &mp_pInternal->mp_Error);
@@ -999,15 +967,15 @@ namespace NMib::NDBus
 
 	bool CError::f_IsSet() const
 	{
-		return mp_pInternal->mp_Lib.dbus_error_is_set(const_cast<DBusError*>(&mp_pInternal->mp_Error));
+		return mp_pInternal->mp_Lib.dbus_error_is_set(const_cast<DBusError *>(&mp_pInternal->mp_Error));
 	}
 
-	char const* CError::f_GetName() const
+	char const *CError::f_GetName() const
 	{
 		return mp_pInternal->mp_Error.name;
 	}
 
-	char const* CError::f_GetMessage() const
+	char const *CError::f_GetMessage() const
 	{
 		return mp_pInternal->mp_Error.message;
 	}
@@ -1017,7 +985,7 @@ namespace NMib::NDBus
 		mp_pInternal->mp_Lib.dbus_error_free(&mp_pInternal->mp_Error);
 	}
 
-	void CError::f_Take(DBusError& _FromHere)
+	void CError::f_Take(DBusError &_FromHere)
 	{
 		mp_pInternal->mp_Lib.dbus_move_error(&_FromHere, &mp_pInternal->mp_Error);
 	}
@@ -1026,13 +994,12 @@ namespace NMib::NDBus
 	// CConnection
 	//
 
-	CConnection::CConnection(CSystem& _Sys)
+	CConnection::CConnection(CSystem &_Sys)
 		: mp_Lib(*_Sys.mp_pLib)
 		, mp_pConnection(nullptr)
 		, mp_Flags(EFlag_None)
 		, mp_LastError(_Sys)
 	{
-
 	}
 
 	CConnection::~CConnection()
@@ -1040,12 +1007,12 @@ namespace NMib::NDBus
 		f_Close();
 	}
 
-	CError const& CConnection::f_GetLastError() const
+	CError const &CConnection::f_GetLastError() const
 	{
 		return mp_LastError;
 	}
 
-	bool CConnection::f_Open(char const* _pAddress, bool _bPrivate)
+	bool CConnection::f_Open(char const *_pAddress, bool _bPrivate)
 	{
 		if (mp_pConnection)
 		{
@@ -1056,13 +1023,9 @@ namespace NMib::NDBus
 		CError Error(mp_Lib);
 
 		if (!_bPrivate)
-		{
 			mp_pConnection = mp_Lib.dbus_connection_open(_pAddress, &Error.mp_pInternal->mp_Error);
-		}
 		else
-		{
 			mp_pConnection = mp_Lib.dbus_connection_open_private(_pAddress, &Error.mp_pInternal->mp_Error);
-		}
 
 		if (!mp_pConnection)
 		{
@@ -1087,14 +1050,10 @@ namespace NMib::NDBus
 		CError Error(mp_Lib);
 
 		DBusBusType BusType = DBUS_BUS_SESSION;
-		switch(_Bus)
+		switch (_Bus)
 		{
-			case EDBusBus_Session:
-				BusType = DBUS_BUS_SESSION;
-				break;
-			case EDBusBus_System:
-				BusType = DBUS_BUS_SYSTEM;
-				break;
+		case EDBusBus_Session: BusType = DBUS_BUS_SESSION; break;
+		case EDBusBus_System: BusType = DBUS_BUS_SYSTEM; break;
 		};
 
 		mp_pConnection = mp_Lib.dbus_bus_get(BusType, &Error.mp_pInternal->mp_Error);
@@ -1116,9 +1075,7 @@ namespace NMib::NDBus
 		if (mp_pConnection)
 		{
 			if (mp_Flags & EFlag_Private)
-			{
 				mp_Lib.dbus_connection_close(mp_pConnection);
-			}
 			mp_Lib.dbus_connection_unref(mp_pConnection);
 			mp_pConnection = nullptr;
 			mp_Flags = EFlag_None;
@@ -1126,18 +1083,11 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	bool CConnection::f_BlockingSendWithReply(CMessage& _Message, CMessage& _oReply, int _TimeoutMillis)
+	bool CConnection::f_BlockingSendWithReply(CMessage &_Message, CMessage &_oReply, int _TimeoutMillis)
 	{
 		CError Error(mp_Lib);
 
-		DBusMessage* pReply = mp_Lib.dbus_connection_send_with_reply_and_block
-			(
-				mp_pConnection
-				, _Message.mp_pMsg
-				, _TimeoutMillis
-				, &Error.mp_pInternal->mp_Error
-			)
-		;
+		DBusMessage *pReply = mp_Lib.dbus_connection_send_with_reply_and_block(mp_pConnection, _Message.mp_pMsg, _TimeoutMillis, &Error.mp_pInternal->mp_Error);
 
 		if (!pReply)
 		{
@@ -1150,7 +1100,7 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	bool CConnection::f_AddMatch(char const* _pMatchRule)
+	bool CConnection::f_AddMatch(char const *_pMatchRule)
 	{
 		if (!mp_pConnection)
 			return false;
@@ -1167,7 +1117,7 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	bool CConnection::f_BlockingPopMessage(CMessage& _oMessage, int _TimeoutMillis)
+	bool CConnection::f_BlockingPopMessage(CMessage &_oMessage, int _TimeoutMillis)
 	{
 		if (!mp_pConnection)
 			return false;
@@ -1180,7 +1130,7 @@ namespace NMib::NDBus
 		}
 
 		// Pop the next message from the queue
-		DBusMessage* pMsg = mp_Lib.dbus_connection_pop_message(mp_pConnection);
+		DBusMessage *pMsg = mp_Lib.dbus_connection_pop_message(mp_pConnection);
 		if (!pMsg)
 		{
 			// No message available (timeout or only internal messages)
@@ -1218,7 +1168,7 @@ namespace NMib::NDBus
 		mp_pLib->f_Unload();
 	}
 
-	bool CSystem::f_ReadyForUse()	// f_IsOK will never return true until this has been called and returned true.
+	bool CSystem::f_ReadyForUse() // f_IsOK will never return true until this has been called and returned true.
 	{
 		DMibLock(mp_LibLock);
 		return mp_pLib->f_OK() || mp_pLib->f_Reload();

@@ -7,7 +7,7 @@ namespace NMib
 {
 	namespace NSys
 	{
-		extern const ch8* g_LinuxProgramIdentifier;
+		extern ch8 const *g_LinuxProgramIdentifier;
 	}
 }
 
@@ -17,12 +17,10 @@ namespace NMib::NDesktop
 		: mp_Identifier(_Identifier)
 		, mp_Path(_Path)
 	{
-
 	}
 
 	CDesktopFileParser::~CDesktopFileParser()
 	{
-
 	}
 
 	void CDesktopFileParser::f_SetIconPath(NStr::CStr const &_IconPath)
@@ -65,20 +63,20 @@ namespace NMib::NDesktop
 		{
 			Contents = NFile::CFile::fs_ReadStringFromFile(NStr::CStr(mp_Path), true);
 		}
-		catch (NFile::CExceptionFile const&)
+		catch (NFile::CExceptionFile const &)
 		{
 			return false;
 		}
 
 		CDesktopGroup *pDesktopGroup = nullptr;
-		while(!Contents.f_IsEmpty())
+		while (!Contents.f_IsEmpty())
 		{
 			aint NewLinePos = Contents.f_Find("\n");
 			if (NewLinePos == -1)
 				break;
 
 			NStr::CStr Line = Contents.f_Left(NewLinePos);
-			Contents = Contents.f_Delete(0, NewLinePos+1);
+			Contents = Contents.f_Delete(0, NewLinePos + 1);
 
 			NStr::CStr Key;
 			NStr::CStr Value;
@@ -137,9 +135,9 @@ namespace NMib::NDesktop
 
 			{
 				NContainer::TCVector<NStr::CStr> ConvertedActions;
-				for(CDesktopAction const &TaskItem : mp_lActions)
+				for (CDesktopAction const &TaskItem : mp_lActions)
 					ConvertedActions.f_InsertLast(fsp_MakeValidAction(TaskItem.m_Description));
-				for(CDesktopAction const &RecentItem : mp_lRecentItems)
+				for (CDesktopAction const &RecentItem : mp_lRecentItems)
 					ConvertedActions.f_InsertLast(fsp_MakeValidAction(RecentItem.m_Description));
 				if (!ConvertedActions.f_IsEmpty())
 					DesktopEntry.f_SetValue("Actions", ConvertedActions);
@@ -149,7 +147,7 @@ namespace NMib::NDesktop
 		}
 
 		// Tasks
-		for(CDesktopAction const &TaskItem : mp_lActions)
+		for (CDesktopAction const &TaskItem : mp_lActions)
 		{
 			CDesktopGroup ItemEntry;
 			ItemEntry.f_SetName(NStr::CStr::CFormat("Desktop Action {}") << fsp_MakeValidAction(TaskItem.m_Description));
@@ -162,7 +160,7 @@ namespace NMib::NDesktop
 		}
 
 		// Recent items
-		for(CDesktopAction const &RecentItem : mp_lRecentItems)
+		for (CDesktopAction const &RecentItem : mp_lRecentItems)
 		{
 			CDesktopGroup ItemEntry;
 			ItemEntry.f_SetName(NStr::CStr::CFormat("Desktop Action {}") << fsp_MakeValidAction(RecentItem.m_Description));
@@ -219,24 +217,23 @@ namespace NMib::NDesktop
 			(void)Exception;
 			DMibLog(Debug, "Unable to create desktop file: {}", Exception.f_GetErrorStr());
 		}
-
 	}
 
 	NContainer::CByteVector CDesktopFileParser::fp_ExportContents(NContainer::TCVector<CDesktopGroup> const &_Desktop)
 	{
 		NContainer::CByteVector Contents;
 
-		for(CDesktopGroup const &DesktopGroup : _Desktop)
+		for (CDesktopGroup const &DesktopGroup : _Desktop)
 		{
 			NStr::CStr Entry = NStr::CStr::CFormat("[{}]\n") << DesktopGroup.m_Name;
-			Contents.f_Insert((uint8*)Entry.f_GetStr(), Entry.f_GetLen());
+			Contents.f_Insert((uint8 *)Entry.f_GetStr(), Entry.f_GetLen());
 
 			NContainer::TCMap<NStr::CStr, NStr::CStr>::CIteratorConst KeyValueIter = DesktopGroup.m_KeyValueMap.f_GetIterator();
 			while (KeyValueIter)
 			{
 				NStr::CStr KeyValuePair = fsp_ConvertToDesktopFileEntry(KeyValueIter.f_GetKey(), *KeyValueIter);
 				if (!KeyValuePair.f_IsEmpty())
-					Contents.f_Insert((uint8*)KeyValuePair.f_GetStr(), KeyValuePair.f_GetLen());
+					Contents.f_Insert((uint8 *)KeyValuePair.f_GetStr(), KeyValuePair.f_GetLen());
 				++KeyValueIter;
 			}
 			Contents.f_Insert('\n');
@@ -263,11 +260,8 @@ namespace NMib::NDesktop
 		ch8 const *pChar = _Action.f_GetStr();
 		while (*pChar)
 		{
-			if ((*pChar >= 'a' && *pChar <= 'z')
-				|| (*pChar >= 'A' && *pChar <= 'Z')
-				|| (*pChar >= '0' && *pChar <= '9')
-				|| *pChar == '-')
-					Result.f_AddChar(*pChar);
+			if ((*pChar >= 'a' && *pChar <= 'z') || (*pChar >= 'A' && *pChar <= 'Z') || (*pChar >= '0' && *pChar <= '9') || *pChar == '-')
+				Result.f_AddChar(*pChar);
 			++pChar;
 		}
 
@@ -281,7 +275,7 @@ namespace NMib::NDesktop
 
 	void CDesktopFileParser::CDesktopGroup::f_SetValue(NStr::CStr const &_Key, NStr::CStr const &_Value)
 	{
-		m_KeyValueMap[_Key] = _Value;		// Single values does not escape semicolon
+		m_KeyValueMap[_Key] = _Value; // Single values does not escape semicolon
 	}
 
 	void CDesktopFileParser::CDesktopGroup::f_SetValue(NStr::CStr const &_Key, NContainer::TCVector<NStr::CStr> const &_Values)
