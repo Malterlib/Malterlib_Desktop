@@ -43,7 +43,6 @@ Import "../Core/Lib_Malterlib.MTarget"
 	}
 }
 
-
 Property
 {
 	MalterlibLibrary_Desktop: bool = MalterlibLibrary_All
@@ -86,8 +85,7 @@ Property
 Property
 {
 	!!MalterlibEnableInternalTests true
-	
+
 	MalterlibTests =+ "Malterlib_Desktop"
 	MalterlibTestExtraGroups_Malterlib_Desktop: [string] = ["{Test}/{Malterlib_Desktop}"]
 }
-

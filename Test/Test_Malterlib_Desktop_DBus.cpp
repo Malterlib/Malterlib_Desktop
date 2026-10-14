@@ -9,11 +9,9 @@ using namespace NMib;
 
 namespace
 {
-
 	class CDBus_Tests : public NMib::NTest::CTest
 	{
 	public:
-
 		void f_DoTests()
 		{
 			NDBus::CSystem DBus;
@@ -94,21 +92,7 @@ namespace
 				lStrings.f_Insert("One");
 				lStrings.f_Insert("Two");
 
-				bool bRet = Writer.f_AppendArgs
-					(
-						(uint8)0
-						, (int16)1
-						, (uint16)2
-						, (int32)3
-						, (uint32)4
-						, (int64)5
-						, (uint64)6
-						, NStr::CStr("X")
-						, false
-						, lBytes
-						, lStrings
-					)
-				;
+				bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
 
 				DMibTest(DMibExpr(bRet) == DMibExpr(true));
 			};
@@ -128,21 +112,7 @@ namespace
 					lStrings.f_Insert("One");
 					lStrings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs
-						(
-							(uint8)0
-							, (int16)1
-							, (uint16)2
-							, (int32)3
-							, (uint32)4
-							, (int64)5
-							, (uint64)6
-							, NStr::CStr("X")
-							, false
-							, lBytes
-							, lStrings
-						)
-					;
+					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -200,7 +170,7 @@ namespace
 
 					DMibTest(DMibExpr(Reader.f_ArgAvailable()) == DMibExpr(false));
 
-					bool bRet3 = Reader.f_PopArgs( UInt32Var );
+					bool bRet3 = Reader.f_PopArgs(UInt32Var);
 
 					DMibTest(DMibExpr(bRet3) == DMibExpr(false));
 				}
@@ -221,21 +191,7 @@ namespace
 					lStrings.f_Insert("One");
 					lStrings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs
-						(
-							(uint8)0
-							, (int16)1
-							, (uint16)2
-							, (int32)3
-							, (uint32)4
-							, (int64)5
-							, (uint64)6
-							, NStr::CStr("X")
-							, false
-							, lBytes
-							, lStrings
-						)
-					;
+					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -257,23 +213,9 @@ namespace
 					NContainer::CByteVector lBytesVar;
 					NContainer::TCVector<NStr::CStr> lStringsVar;
 
-					bool bRet2 = Reader.f_PopArgs
-						(
-							UInt8Var
-							, Int16Var
-							, UInt16Var
-							, Int32Var
-							, UInt32Var
-							, Int64Var
-							, UInt64Var
-							, StringVar
-							, bBoolVar
-							, lBytesVar
-							, lStringsVar
-						)
-					;
+					bool bRet2 = Reader.f_PopArgs(UInt8Var, Int16Var, UInt16Var, Int32Var, UInt32Var, Int64Var, UInt64Var, StringVar, bBoolVar, lBytesVar, lStringsVar);
 
-					DMibTest(DMibExpr(bRet2) == DMibExpr(true)) (ETest_FailAndStop);
+					DMibTest(DMibExpr(bRet2) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(UInt8Var) == DMibExpr(0));
 					DMibTest(DMibExpr(Int16Var) == DMibExpr(1));
 					DMibTest(DMibExpr(UInt16Var) == DMibExpr(2));
@@ -299,7 +241,7 @@ namespace
 
 					DMibTest(DMibExpr(Reader.f_ArgAvailable()) == DMibExpr(false));
 
-					bool bRet3 = Reader.f_PopArgs( UInt32Var );
+					bool bRet3 = Reader.f_PopArgs(UInt32Var);
 
 					DMibTest(DMibExpr(bRet3) == DMibExpr(false));
 				}
@@ -307,29 +249,19 @@ namespace
 
 			DMibTestSuite("Connection")
 			{
-				NDBus::CMessage Msg
-					(
-						NDBus::EMessageType_Method
-						, "org.freedesktop.DBus"
-						, "/"
-						, "org.freedesktop.DBus"
-						, "GetId"
-						, DBus
-					)
-				;
+				NDBus::CMessage Msg(NDBus::EMessageType_Method, "org.freedesktop.DBus", "/", "org.freedesktop.DBus", "GetId", DBus);
 
 				NDBus::CConnection Connection(DBus);
 
 				bool bOpened = Connection.f_Open(NDBus::EDBusBus_Session);
 
-				DMibTest(DMibExpr(bOpened) == DMibExpr(true)) (ETest_FailAndStop);
+				DMibTest(DMibExpr(bOpened) == DMibExpr(true))(ETest_FailAndStop);
 
 				NDBus::CMessage Reply(DBus);
 
 				bool bSentAndReceived = Connection.f_BlockingSendWithReply(Msg, Reply);
 
-				DMibTest(DMibExpr(bSentAndReceived) == DMibExpr(true)) (ETest_FailAndStop);
-
+				DMibTest(DMibExpr(bSentAndReceived) == DMibExpr(true))(ETest_FailAndStop);
 
 				{
 					NDBus::CMessageReader Reader(Reply);
@@ -346,11 +278,8 @@ namespace
 				bool bClosed = Connection.f_Close();
 
 				DMibTest(DMibExpr(bClosed) == DMibExpr(true));
-
 			};
-
 		}
-
 	};
 
 	DMibTestRegister(CDBus_Tests, Malterlib::Desktop);
