@@ -124,7 +124,7 @@ extern "C"
 	typedef struct DBusConnection DBusConnection;
 }
 
-#define DMibDBusError(_Msg) DMibImpError(CDBusException, _Msg);
+#define DMibDBusError(d_Msg) DMibImpError(CDBusException, d_Msg);
 
 namespace NMib::NDBus
 {
