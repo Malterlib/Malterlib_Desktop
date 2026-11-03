@@ -404,10 +404,10 @@ namespace NMib::NDBus
 	}
 
 	template <>
-	bool CMessageWriter::f_AppendArg<char const *>(char const * const &_Value)
+	bool CMessageWriter::f_AppendArg<char const *>(char const * const &_pValue)
 	{
 		// TODO: Encoding
-		return mp_pInternal->m_Lib.m_fDBusMessageIterAppendBasic(&mp_pInternal->m_Iter, DBUS_TYPE_STRING, &_Value) ? true : false;
+		return mp_pInternal->m_Lib.m_fDBusMessageIterAppendBasic(&mp_pInternal->m_Iter, DBUS_TYPE_STRING, &_pValue) ? true : false;
 	}
 
 	template <>
@@ -427,9 +427,9 @@ namespace NMib::NDBus
 	}
 
 	template <>
-	bool CMessageWriter::f_AppendArg<bool>(bool const &_Value)
+	bool CMessageWriter::f_AppendArg<bool>(bool const &_bValue)
 	{
-		dbus_int32_t Value = _Value;
+		dbus_int32_t Value = _bValue;
 		return mp_pInternal->m_Lib.m_fDBusMessageIterAppendBasic(&mp_pInternal->m_Iter, DBUS_TYPE_BOOLEAN, &Value) ? true : false;
 	}
 
@@ -462,9 +462,9 @@ namespace NMib::NDBus
 		bRet = mp_pInternal->m_Lib.m_fDBusMessageIterOpenContainer(&mp_pInternal->m_Iter, DBUS_TYPE_ARRAY, "s", &ArrayIter);
 		if (bRet)
 		{
-			for (auto StrIter = _Value.f_GetIterator(); StrIter && bRet; ++StrIter)
+			for (auto iString = _Value.f_GetIterator(); iString && bRet; ++iString)
 			{
-				char const *pValue = (*StrIter).f_GetStr();
+				char const *pValue = (*iString).f_GetStr();
 				bRet = bRet && (mp_pInternal->m_Lib.m_fDBusMessageIterAppendBasic(&ArrayIter, DBUS_TYPE_STRING, &pValue) ? true : false);
 			}
 
@@ -637,14 +637,14 @@ namespace NMib::NDBus
 	}
 
 	template <>
-	bool CMessageReader::f_PopArg<bool>(bool &o_Value)
+	bool CMessageReader::f_PopArg<bool>(bool &o_bValue)
 	{
 		if (mp_pInternal->m_Lib.m_fDBusMessageIterGetArgType(&mp_pInternal->m_Iter) != DBUS_TYPE_BOOLEAN)
 			return false;
 
 		dbus_bool_t Value;
 		mp_pInternal->m_Lib.m_fDBusMessageIterGetBasic(&mp_pInternal->m_Iter, &Value);
-		o_Value = Value;
+		o_bValue = Value;
 
 		mp_pInternal->m_Lib.m_fDBusMessageIterNext(&mp_pInternal->m_Iter);
 

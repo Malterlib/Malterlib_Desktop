@@ -7,7 +7,7 @@ namespace NMib
 {
 	namespace NSys
 	{
-		extern ch8 const *g_LinuxProgramIdentifier;
+		extern ch8 const *g_pLinuxProgramIdentifier;
 	}
 }
 
@@ -123,7 +123,7 @@ namespace NMib::NDesktop
 
 			DesktopEntry.f_SetValue("Name", ProgramName);
 
-			DesktopEntry.f_SetValue("StartupWMClass", NMib::NSys::g_LinuxProgramIdentifier);
+			DesktopEntry.f_SetValue("StartupWMClass", NMib::NSys::g_pLinuxProgramIdentifier);
 
 			if (!mp_Exec.f_IsEmpty())
 				DesktopEntry.f_SetValue("Exec", mp_Exec);
@@ -228,13 +228,13 @@ namespace NMib::NDesktop
 			NStr::CStr Entry = NStr::CStr::CFormat("[{}]\n") << DesktopGroup.m_Name;
 			Contents.f_Insert((uint8 *)Entry.f_GetStr(), Entry.f_GetLen());
 
-			NContainer::TCMap<NStr::CStr, NStr::CStr>::CIteratorConst KeyValueIter = DesktopGroup.m_KeyValueMap.f_GetIterator();
-			while (KeyValueIter)
+			NContainer::TCMap<NStr::CStr, NStr::CStr>::CIteratorConst iKeyValue = DesktopGroup.m_KeyValueMap.f_GetIterator();
+			while (iKeyValue)
 			{
-				NStr::CStr KeyValuePair = fsp_ConvertToDesktopFileEntry(KeyValueIter.f_GetKey(), *KeyValueIter);
+				NStr::CStr KeyValuePair = fsp_ConvertToDesktopFileEntry(iKeyValue.f_GetKey(), *iKeyValue);
 				if (!KeyValuePair.f_IsEmpty())
 					Contents.f_Insert((uint8 *)KeyValuePair.f_GetStr(), KeyValuePair.f_GetLen());
-				++KeyValueIter;
+				++iKeyValue;
 			}
 			Contents.f_Insert('\n');
 		}

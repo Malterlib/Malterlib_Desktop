@@ -370,10 +370,10 @@ namespace NMib::NDBus
 	bool CMessageWriter::f_AppendArg<uint64>(uint64 const &_Value);
 
 	template <>
-	bool CMessageWriter::f_AppendArg<bool>(bool const &_Value);
+	bool CMessageWriter::f_AppendArg<bool>(bool const &_bValue);
 
 	template <>
-	bool CMessageWriter::f_AppendArg<char const *>(char const * const &_Value);
+	bool CMessageWriter::f_AppendArg<char const *>(char const * const &_pValue);
 
 	template <>
 	bool CMessageWriter::f_AppendArg<NStr::CStr>(NStr::CStr const &_Value);
@@ -437,7 +437,7 @@ namespace NMib::NDBus
 	bool CMessageReader::f_PopArg<NStr::CStrSecure>(NStr::CStrSecure &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<bool>(bool &o_Value);
+	bool CMessageReader::f_PopArg<bool>(bool &o_bValue);
 
 	template <>
 	bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector &o_Value);
