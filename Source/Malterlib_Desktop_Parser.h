@@ -30,10 +30,10 @@ namespace NMib::NDesktop
 
 		void f_SetIconPath(NStr::CStr const &_IconPath);
 		void f_SetExec(NStr::CStr const &_Exec);
-		void f_SetCategories(NContainer::TCVector<NStr::CStr> const &_lCategories);
-		void f_SetMimeTypes(NContainer::TCVector<NStr::CStr> const &_lMimeTypes);
-		void f_SetActions(NContainer::TCVector<CDesktopAction> const &_lActions);
-		void f_SetRecentItems(NContainer::TCVector<CDesktopAction> const &_lRecentItems);
+		void f_SetCategories(NContainer::TCVector<NStr::CStr> const &_Categories);
+		void f_SetMimeTypes(NContainer::TCVector<NStr::CStr> const &_MimeTypes);
+		void f_SetActions(NContainer::TCVector<CDesktopAction> const &_Actions);
+		void f_SetRecentItems(NContainer::TCVector<CDesktopAction> const &_RecentItems);
 
 		bool f_Parse(NContainer::TCVector<CDesktopGroup> &_Desktop);
 		void f_Write();

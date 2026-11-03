@@ -209,13 +209,13 @@ namespace NMib::NDBus
 		CMessageWriter(CMessage &_Message);
 		~CMessageWriter();
 
-		template <typename t_CType>
-		bool f_AppendArg(t_CType const &_Arg);
+		template <typename tf_CType>
+		bool f_AppendArg(tf_CType const &_Arg);
 
 		inline bool f_AppendArgs();
 
-		template <typename t_CFirst, typename ...Args>
-		inline bool f_AppendArgs(t_CFirst const &_First, Args const & ..._Args);
+		template <typename tf_CFirst, typename ...tfp_CArgs>
+		inline bool f_AppendArgs(tf_CFirst const &_First, tfp_CArgs const & ...p_Args);
 
 	private:
 		struct CInternal;
@@ -227,13 +227,13 @@ namespace NMib::NDBus
 		CMessageReader(CMessage const &_Message);
 		~CMessageReader();
 
-		template <typename t_CType>
-		bool f_PopArg(t_CType &_oArg);
+		template <typename tf_CType>
+		bool f_PopArg(tf_CType &o_Arg);
 
 		inline bool f_PopArgs();
 
-		template <typename t_CFirst, typename ...Args>
-		inline bool f_PopArgs(t_CFirst &_First, Args & ..._Args);
+		template <typename tf_CFirst, typename ...tfp_CArgs>
+		inline bool f_PopArgs(tf_CFirst &o_First, tfp_CArgs & ...po_Args);
 
 		bool f_ArgAvailable();
 
@@ -288,7 +288,7 @@ namespace NMib::NDBus
 		bool f_Open(EDBusBus _Bus);
 		bool f_Close();
 
-		bool f_BlockingSendWithReply(CMessage &_Message, CMessage &_oReply, int _TimeoutMillis = gc_DefaultTimeout);
+		bool f_BlockingSendWithReply(CMessage &_Message, CMessage &o_Reply, int _TimeoutMillis = gc_DefaultTimeout);
 
 		// Subscribe to D-Bus signals matching the given rule
 		// Example match rule: "type='signal',interface='se.unbroken.Input.WindowMonitor',member='FocusChanged'"
@@ -297,7 +297,7 @@ namespace NMib::NDBus
 		// Block until a message is available, then return it
 		// Returns false on error or disconnect, true if message received
 		// _TimeoutMillis: -1 for infinite wait, 0 for non-blocking, >0 for timeout in ms
-		bool f_BlockingPopMessage(CMessage &_oMessage, int _TimeoutMillis = gc_DefaultTimeout);
+		bool f_BlockingPopMessage(CMessage &o_Message, int _TimeoutMillis = gc_DefaultTimeout);
 
 		// Get the underlying Unix file descriptor for use with select()/poll()
 		// Returns -1 if not available
@@ -341,10 +341,10 @@ namespace NMib::NDBus
 	// CMessageWriter Implementation
 	//
 
-	template <typename t_CType>
-	bool CMessageWriter::f_AppendArg(t_CType const &_Arg)
+	template <typename tf_CType>
+	bool CMessageWriter::f_AppendArg(tf_CType const &_Arg)
 	{
-		static_assert(NTraits::cIsSame<t_CType, void>, "This type is not supported");
+		static_assert(NTraits::cIsSame<tf_CType, void>, "This type is not supported");
 		return false;
 	}
 
@@ -392,76 +392,76 @@ namespace NMib::NDBus
 		return true;
 	}
 
-	template <typename t_CFirst, typename ...Args>
-	bool CMessageWriter::f_AppendArgs(t_CFirst const &_First, Args const & ..._Args)
+	template <typename tf_CFirst, typename ...tfp_CArgs>
+	bool CMessageWriter::f_AppendArgs(tf_CFirst const &_First, tfp_CArgs const & ...p_Args)
 	{
-		return f_AppendArg<t_CFirst>(_First) && f_AppendArgs(_Args...);
+		return f_AppendArg<tf_CFirst>(_First) && f_AppendArgs(p_Args...);
 	}
 
 	//
 	// CMessageReader Implementation
 	//
 
-	template <typename t_CType>
-	bool CMessageReader::f_PopArg(t_CType &_oArg)
+	template <typename tf_CType>
+	bool CMessageReader::f_PopArg(tf_CType &o_Arg)
 	{
-		static_assert(NTraits::cIsSame<t_CType, void>, "This type is not supported");
+		static_assert(NTraits::cIsSame<tf_CType, void>, "This type is not supported");
 		return false;
 	}
 
 	template <>
-	bool CMessageReader::f_PopArg<uint8>(uint8 &_oValue);
+	bool CMessageReader::f_PopArg<uint8>(uint8 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<int16>(int16 &_oValue);
+	bool CMessageReader::f_PopArg<int16>(int16 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<uint16>(uint16 &_oValue);
+	bool CMessageReader::f_PopArg<uint16>(uint16 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<int32>(int32 &_oValue);
+	bool CMessageReader::f_PopArg<int32>(int32 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<uint32>(uint32 &_oValue);
+	bool CMessageReader::f_PopArg<uint32>(uint32 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<int64>(int64 &_oValue);
+	bool CMessageReader::f_PopArg<int64>(int64 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<uint64>(uint64 &_oValue);
+	bool CMessageReader::f_PopArg<uint64>(uint64 &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<NStr::CStr>(NStr::CStr &_oValue);
+	bool CMessageReader::f_PopArg<NStr::CStr>(NStr::CStr &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<NStr::CStrSecure>(NStr::CStrSecure &_oValue);
+	bool CMessageReader::f_PopArg<NStr::CStrSecure>(NStr::CStrSecure &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<bool>(bool &_oValue);
+	bool CMessageReader::f_PopArg<bool>(bool &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector &_oValue);
+	bool CMessageReader::f_PopArg<NContainer::CByteVector>(NContainer::CByteVector &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> &_oValue);
+	bool CMessageReader::f_PopArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<CDBusVariant>(CDBusVariant &_oValue);
+	bool CMessageReader::f_PopArg<CDBusVariant>(CDBusVariant &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<CDBusStringVariantDict>(CDBusStringVariantDict &_oValue);
+	bool CMessageReader::f_PopArg<CDBusStringVariantDict>(CDBusStringVariantDict &o_Value);
 
 	template <>
-	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict &_oValue);
+	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict &o_Value);
 
 	bool CMessageReader::f_PopArgs()
 	{
 		return true;
 	}
 
-	template <typename t_CFirst, typename ...Args>
-	bool CMessageReader::f_PopArgs(t_CFirst &_oFirst, Args & ..._oArgs)
+	template <typename tf_CFirst, typename ...tfp_CArgs>
+	bool CMessageReader::f_PopArgs(tf_CFirst &o_First, tfp_CArgs & ...po_Args)
 	{
-		return f_PopArg(_oFirst) && f_PopArgs(_oArgs...);
+		return f_PopArg(o_First) && f_PopArgs(po_Args...);
 	}
 }

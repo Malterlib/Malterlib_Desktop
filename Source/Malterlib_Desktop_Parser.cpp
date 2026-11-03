@@ -33,24 +33,24 @@ namespace NMib::NDesktop
 		mp_Exec = _Exec;
 	}
 
-	void CDesktopFileParser::f_SetCategories(NContainer::TCVector<NStr::CStr> const &_lCategories)
+	void CDesktopFileParser::f_SetCategories(NContainer::TCVector<NStr::CStr> const &_Categories)
 	{
-		mp_lCategories = _lCategories;
+		mp_lCategories = _Categories;
 	}
 
-	void CDesktopFileParser::f_SetMimeTypes(NContainer::TCVector<NStr::CStr> const &_lMimeTypes)
+	void CDesktopFileParser::f_SetMimeTypes(NContainer::TCVector<NStr::CStr> const &_MimeTypes)
 	{
-		mp_lMimeTypes = _lMimeTypes;
+		mp_lMimeTypes = _MimeTypes;
 	}
 
-	void CDesktopFileParser::f_SetActions(NContainer::TCVector<CDesktopAction> const &_lActions)
+	void CDesktopFileParser::f_SetActions(NContainer::TCVector<CDesktopAction> const &_Actions)
 	{
-		mp_lActions = _lActions;
+		mp_lActions = _Actions;
 	}
 
-	void CDesktopFileParser::f_SetRecentItems(NContainer::TCVector<CDesktopAction> const &_lRecentItems)
+	void CDesktopFileParser::f_SetRecentItems(NContainer::TCVector<CDesktopAction> const &_RecentItems)
 	{
-		mp_lRecentItems = _lRecentItems;
+		mp_lRecentItems = _RecentItems;
 	}
 
 	bool CDesktopFileParser::f_Parse(NContainer::TCVector<CDesktopGroup> &_Desktop)
