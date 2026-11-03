@@ -49,10 +49,10 @@ namespace NMib::NDesktop
 		NStr::CStr mp_IconPath;
 
 		NStr::CStr mp_Exec;
-		NContainer::TCVector<NStr::CStr> mp_lCategories;
-		NContainer::TCVector<NStr::CStr> mp_lMimeTypes;
-		NContainer::TCVector<CDesktopAction> mp_lActions;
-		NContainer::TCVector<CDesktopAction> mp_lRecentItems;
+		NContainer::TCVector<NStr::CStr> mp_Categories;
+		NContainer::TCVector<NStr::CStr> mp_MimeTypes;
+		NContainer::TCVector<CDesktopAction> mp_Actions;
+		NContainer::TCVector<CDesktopAction> mp_RecentItems;
 	};
 }
 

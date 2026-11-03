@@ -54,13 +54,13 @@ namespace
 
 				NDBus::CMessageWriter Writer(Msg);
 
-				NContainer::CByteVector lBytes;
-				lBytes.f_SetLen(32);
-				NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
+				NContainer::CByteVector Bytes;
+				Bytes.f_SetLen(32);
+				NMemory::fg_MemClear(Bytes.f_GetArray(), 32);
 
-				NContainer::TCVector<NStr::CStr> lStrings;
-				lStrings.f_Insert("One");
-				lStrings.f_Insert("Two");
+				NContainer::TCVector<NStr::CStr> Strings;
+				Strings.f_Insert("One");
+				Strings.f_Insert("Two");
 
 				NStr::CStr StringVar("X");
 
@@ -73,8 +73,8 @@ namespace
 				DMibTest(DMibExpr(Writer.f_AppendArg((uint64)6)) == DMibExpr(true))(ETest_FailAndStop);
 				DMibTest(DMibExpr(Writer.f_AppendArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);
 				DMibTest(DMibExpr(Writer.f_AppendArg(false)) == DMibExpr(true))(ETest_FailAndStop);
-				DMibTest(DMibExpr(Writer.f_AppendArg(lBytes)) == DMibExpr(true))(ETest_FailAndStop);
-				DMibTest(DMibExpr(Writer.f_AppendArg(lStrings)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg(Bytes)) == DMibExpr(true))(ETest_FailAndStop);
+				DMibTest(DMibExpr(Writer.f_AppendArg(Strings)) == DMibExpr(true))(ETest_FailAndStop);
 			};
 
 			DMibTestSuite("MessageWriter_AppendArgs")
@@ -83,15 +83,15 @@ namespace
 
 				NDBus::CMessageWriter Writer(Msg);
 
-				NContainer::CByteVector lBytes;
-				lBytes.f_SetLen(32);
-				NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
+				NContainer::CByteVector Bytes;
+				Bytes.f_SetLen(32);
+				NMemory::fg_MemClear(Bytes.f_GetArray(), 32);
 
-				NContainer::TCVector<NStr::CStr> lStrings;
-				lStrings.f_Insert("One");
-				lStrings.f_Insert("Two");
+				NContainer::TCVector<NStr::CStr> Strings;
+				Strings.f_Insert("One");
+				Strings.f_Insert("Two");
 
-				bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
+				bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, Bytes, Strings);
 
 				DMibTest(DMibExpr(bRet) == DMibExpr(true));
 			};
@@ -103,15 +103,15 @@ namespace
 				{
 					NDBus::CMessageWriter Writer(Msg);
 
-					NContainer::CByteVector lBytes;
-					lBytes.f_SetLen(32);
-					NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
+					NContainer::CByteVector Bytes;
+					Bytes.f_SetLen(32);
+					NMemory::fg_MemClear(Bytes.f_GetArray(), 32);
 
-					NContainer::TCVector<NStr::CStr> lStrings;
-					lStrings.f_Insert("One");
-					lStrings.f_Insert("Two");
+					NContainer::TCVector<NStr::CStr> Strings;
+					Strings.f_Insert("One");
+					Strings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
+					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, Bytes, Strings);
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -130,8 +130,8 @@ namespace
 					uint64 UInt64Var = 100;
 					NStr::CStr StringVar = "Y";
 					bool bBoolVar = true;
-					NContainer::CByteVector lBytesVar;
-					NContainer::TCVector<NStr::CStr> lStringsVar;
+					NContainer::CByteVector BytesVar;
+					NContainer::TCVector<NStr::CStr> StringsVar;
 
 					DMibTest(DMibExpr(Reader.f_PopArg(UInt8Var)) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(Reader.f_PopArg(Int16Var)) == DMibExpr(true))(ETest_FailAndStop);
@@ -142,8 +142,8 @@ namespace
 					DMibTest(DMibExpr(Reader.f_PopArg(UInt64Var)) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(Reader.f_PopArg(StringVar)) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(Reader.f_PopArg(bBoolVar)) == DMibExpr(true))(ETest_FailAndStop);
-					DMibTest(DMibExpr(Reader.f_PopArg(lBytesVar)) == DMibExpr(true))(ETest_FailAndStop);
-					DMibTest(DMibExpr(Reader.f_PopArg(lStringsVar)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(BytesVar)) == DMibExpr(true))(ETest_FailAndStop);
+					DMibTest(DMibExpr(Reader.f_PopArg(StringsVar)) == DMibExpr(true))(ETest_FailAndStop);
 
 					DMibTest(DMibExpr(UInt8Var) == DMibExpr(0));
 					DMibTest(DMibExpr(Int16Var) == DMibExpr(1));
@@ -155,16 +155,16 @@ namespace
 					DMibTest(DMibExpr(StringVar) == DMibExpr(NStr::CStr("X")));
 					DMibTest(DMibExpr(bBoolVar) == DMibExpr(false));
 					{
-						NContainer::CByteVector lExpectedBytes;
-						lExpectedBytes.f_SetLen(32);
-						NMemory::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
-						DMibTest(DMibExpr(lBytesVar) == DMibExpr(lExpectedBytes));
+						NContainer::CByteVector ExpectedBytes;
+						ExpectedBytes.f_SetLen(32);
+						NMemory::fg_MemClear(ExpectedBytes.f_GetArray(), 32);
+						DMibTest(DMibExpr(BytesVar) == DMibExpr(ExpectedBytes));
 					}
 					{
-						NContainer::TCVector<NStr::CStr> lExpectedStrings;
-						lExpectedStrings.f_Insert("One");
-						lExpectedStrings.f_Insert("Two");
-						DMibTest(DMibExpr(lStringsVar) == DMibExpr(lExpectedStrings));
+						NContainer::TCVector<NStr::CStr> ExpectedStrings;
+						ExpectedStrings.f_Insert("One");
+						ExpectedStrings.f_Insert("Two");
+						DMibTest(DMibExpr(StringsVar) == DMibExpr(ExpectedStrings));
 					}
 
 					DMibTest(DMibExpr(Reader.f_ArgAvailable()) == DMibExpr(false));
@@ -182,15 +182,15 @@ namespace
 				{
 					NDBus::CMessageWriter Writer(Msg);
 
-					NContainer::CByteVector lBytes;
-					lBytes.f_SetLen(32);
-					NMemory::fg_MemClear(lBytes.f_GetArray(), 32);
+					NContainer::CByteVector Bytes;
+					Bytes.f_SetLen(32);
+					NMemory::fg_MemClear(Bytes.f_GetArray(), 32);
 
-					NContainer::TCVector<NStr::CStr> lStrings;
-					lStrings.f_Insert("One");
-					lStrings.f_Insert("Two");
+					NContainer::TCVector<NStr::CStr> Strings;
+					Strings.f_Insert("One");
+					Strings.f_Insert("Two");
 
-					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, lBytes, lStrings);
+					bool bRet = Writer.f_AppendArgs((uint8)0, (int16)1, (uint16)2, (int32)3, (uint32)4, (int64)5, (uint64)6, NStr::CStr("X"), false, Bytes, Strings);
 
 					DMibTest(DMibExpr(bRet) == DMibExpr(true));
 				}
@@ -209,10 +209,10 @@ namespace
 					uint64 UInt64Var = 100;
 					NStr::CStr StringVar = "Y";
 					bool bBoolVar = true;
-					NContainer::CByteVector lBytesVar;
-					NContainer::TCVector<NStr::CStr> lStringsVar;
+					NContainer::CByteVector BytesVar;
+					NContainer::TCVector<NStr::CStr> StringsVar;
 
-					bool bRet2 = Reader.f_PopArgs(UInt8Var, Int16Var, UInt16Var, Int32Var, UInt32Var, Int64Var, UInt64Var, StringVar, bBoolVar, lBytesVar, lStringsVar);
+					bool bRet2 = Reader.f_PopArgs(UInt8Var, Int16Var, UInt16Var, Int32Var, UInt32Var, Int64Var, UInt64Var, StringVar, bBoolVar, BytesVar, StringsVar);
 
 					DMibTest(DMibExpr(bRet2) == DMibExpr(true))(ETest_FailAndStop);
 					DMibTest(DMibExpr(UInt8Var) == DMibExpr(0));
@@ -225,17 +225,17 @@ namespace
 					DMibTest(DMibExpr(StringVar) == DMibExpr(NStr::CStr("X")));
 					DMibTest(DMibExpr(bBoolVar) == DMibExpr(false));
 					{
-						NContainer::CByteVector lExpectedBytes;
-						lExpectedBytes.f_SetLen(32);
-						NMemory::fg_MemClear(lExpectedBytes.f_GetArray(), 32);
-						DMibTest(DMibExpr(lBytesVar) == DMibExpr(lExpectedBytes));
+						NContainer::CByteVector ExpectedBytes;
+						ExpectedBytes.f_SetLen(32);
+						NMemory::fg_MemClear(ExpectedBytes.f_GetArray(), 32);
+						DMibTest(DMibExpr(BytesVar) == DMibExpr(ExpectedBytes));
 					}
 
 					{
-						NContainer::TCVector<NStr::CStr> lExpectedStrings;
-						lExpectedStrings.f_Insert("One");
-						lExpectedStrings.f_Insert("Two");
-						DMibTest(DMibExpr(lStringsVar) == DMibExpr(lExpectedStrings));
+						NContainer::TCVector<NStr::CStr> ExpectedStrings;
+						ExpectedStrings.f_Insert("One");
+						ExpectedStrings.f_Insert("Two");
+						DMibTest(DMibExpr(StringsVar) == DMibExpr(ExpectedStrings));
 					}
 
 					DMibTest(DMibExpr(Reader.f_ArgAvailable()) == DMibExpr(false));

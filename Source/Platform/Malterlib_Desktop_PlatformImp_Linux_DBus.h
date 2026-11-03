@@ -269,7 +269,7 @@ namespace NMib::NDBus
 		CError(CDBusLibrary &_Lib);
 	};
 
-	static int const gc_DefaultTimeout = -1;
+	constexpr int gc_DefaultTimeout = -1;
 
 	enum EDBusBus
 	{

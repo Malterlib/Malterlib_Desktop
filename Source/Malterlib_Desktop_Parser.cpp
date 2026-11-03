@@ -35,22 +35,22 @@ namespace NMib::NDesktop
 
 	void CDesktopFileParser::f_SetCategories(NContainer::TCVector<NStr::CStr> const &_Categories)
 	{
-		mp_lCategories = _Categories;
+		mp_Categories = _Categories;
 	}
 
 	void CDesktopFileParser::f_SetMimeTypes(NContainer::TCVector<NStr::CStr> const &_MimeTypes)
 	{
-		mp_lMimeTypes = _MimeTypes;
+		mp_MimeTypes = _MimeTypes;
 	}
 
 	void CDesktopFileParser::f_SetActions(NContainer::TCVector<CDesktopAction> const &_Actions)
 	{
-		mp_lActions = _Actions;
+		mp_Actions = _Actions;
 	}
 
 	void CDesktopFileParser::f_SetRecentItems(NContainer::TCVector<CDesktopAction> const &_RecentItems)
 	{
-		mp_lRecentItems = _RecentItems;
+		mp_RecentItems = _RecentItems;
 	}
 
 	bool CDesktopFileParser::f_Parse(NContainer::TCVector<CDesktopGroup> &_Desktop)
@@ -101,7 +101,7 @@ namespace NMib::NDesktop
 
 	void CDesktopFileParser::f_Write()
 	{
-		NContainer::TCVector<CDesktopGroup> lDesktopContents;
+		NContainer::TCVector<CDesktopGroup> DesktopContents;
 
 		// Desktop Entry
 		{
@@ -111,11 +111,11 @@ namespace NMib::NDesktop
 			DesktopEntry.f_SetValue("Type", "Application");
 			DesktopEntry.f_SetValue("Terminal", "false");
 
-			if (!mp_lMimeTypes.f_IsEmpty())
-				DesktopEntry.f_SetValue("MimeType", mp_lMimeTypes);
+			if (!mp_MimeTypes.f_IsEmpty())
+				DesktopEntry.f_SetValue("MimeType", mp_MimeTypes);
 
-			if (!mp_lCategories.f_IsEmpty())
-				DesktopEntry.f_SetValue("Categories", mp_lCategories);
+			if (!mp_Categories.f_IsEmpty())
+				DesktopEntry.f_SetValue("Categories", mp_Categories);
 
 			NStr::CStr ProgramName = NMib::fg_GetSys()->f_GetProgramName();
 			if (ProgramName.f_IsEmpty())
@@ -135,19 +135,19 @@ namespace NMib::NDesktop
 
 			{
 				NContainer::TCVector<NStr::CStr> ConvertedActions;
-				for (CDesktopAction const &TaskItem : mp_lActions)
+				for (CDesktopAction const &TaskItem : mp_Actions)
 					ConvertedActions.f_InsertLast(fsp_MakeValidAction(TaskItem.m_Description));
-				for (CDesktopAction const &RecentItem : mp_lRecentItems)
+				for (CDesktopAction const &RecentItem : mp_RecentItems)
 					ConvertedActions.f_InsertLast(fsp_MakeValidAction(RecentItem.m_Description));
 				if (!ConvertedActions.f_IsEmpty())
 					DesktopEntry.f_SetValue("Actions", ConvertedActions);
 			}
 
-			lDesktopContents.f_InsertLast(DesktopEntry);
+			DesktopContents.f_InsertLast(DesktopEntry);
 		}
 
 		// Tasks
-		for (CDesktopAction const &TaskItem : mp_lActions)
+		for (CDesktopAction const &TaskItem : mp_Actions)
 		{
 			CDesktopGroup ItemEntry;
 			ItemEntry.f_SetName(NStr::CStr::CFormat("Desktop Action {}") << fsp_MakeValidAction(TaskItem.m_Description));
@@ -156,11 +156,11 @@ namespace NMib::NDesktop
 			if (!TaskItem.m_ActionDescription.f_IsEmpty())
 				ItemEntry.f_SetValue("X-Hansoft-ActionDescription", TaskItem.m_ActionDescription);
 			ItemEntry.f_SetValue("X-Hansoft-TaskType", TaskItem.m_Type);
-			lDesktopContents.f_InsertLast(ItemEntry);
+			DesktopContents.f_InsertLast(ItemEntry);
 		}
 
 		// Recent items
-		for (CDesktopAction const &RecentItem : mp_lRecentItems)
+		for (CDesktopAction const &RecentItem : mp_RecentItems)
 		{
 			CDesktopGroup ItemEntry;
 			ItemEntry.f_SetName(NStr::CStr::CFormat("Desktop Action {}") << fsp_MakeValidAction(RecentItem.m_Description));
@@ -169,10 +169,10 @@ namespace NMib::NDesktop
 			if (!RecentItem.m_ActionDescription.f_IsEmpty())
 				ItemEntry.f_SetValue("X-Hansoft-ActionDescription", RecentItem.m_ActionDescription);
 			ItemEntry.f_SetValue("X-Hansoft-RecentType", RecentItem.m_Type);
-			lDesktopContents.f_InsertLast(ItemEntry);
+			DesktopContents.f_InsertLast(ItemEntry);
 		}
 
-		NContainer::CByteVector Contents = fp_ExportContents(lDesktopContents);
+		NContainer::CByteVector Contents = fp_ExportContents(DesktopContents);
 
 		if (NFile::CFile::fs_FileExists(mp_Path) && NFile::CFile::fs_FileIsSame(Contents, mp_Path))
 			return;
@@ -186,10 +186,10 @@ namespace NMib::NDesktop
 			Attribs |= NFile::EFileAttrib_Executable;
 			NFile::CFile::fs_SetAttributes(mp_Path, Attribs);
 		}
-		catch (NFile::CExceptionFile const &Exception)
+		catch (NFile::CExceptionFile const &_Exception)
 		{
-			(void)Exception;
-			DMibLog(Debug, "Unable to create desktop file: {}", Exception.f_GetErrorStr());
+			(void)_Exception;
+			DMibLog(Debug, "Unable to create desktop file: {}", _Exception.f_GetErrorStr());
 		}
 	}
 
@@ -212,10 +212,10 @@ namespace NMib::NDesktop
 				NFile::CFile::fs_SetAttributes(mp_Path, Attribs);
 			}
 		}
-		catch (NFile::CExceptionFile const &Exception)
+		catch (NFile::CExceptionFile const &_Exception)
 		{
-			(void)Exception;
-			DMibLog(Debug, "Unable to create desktop file: {}", Exception.f_GetErrorStr());
+			(void)_Exception;
+			DMibLog(Debug, "Unable to create desktop file: {}", _Exception.f_GetErrorStr());
 		}
 	}
 
