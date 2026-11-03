@@ -474,6 +474,11 @@ namespace NMib::NDBus
 		return bRet ? true : false;
 	}
 
+	bool CMessageWriter::f_AppendArgs()
+	{
+		return true;
+	}
+
 	//
 	// CMessageReader
 	//
@@ -707,6 +712,11 @@ namespace NMib::NDBus
 
 		mp_pInternal->m_Lib.m_fDBusMessageIterNext(&mp_pInternal->m_Iter);
 
+		return true;
+	}
+
+	bool CMessageReader::f_PopArgs()
+	{
 		return true;
 	}
 

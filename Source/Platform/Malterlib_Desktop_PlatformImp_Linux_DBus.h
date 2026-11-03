@@ -212,7 +212,7 @@ namespace NMib::NDBus
 		template <typename tf_CType>
 		bool f_AppendArg(tf_CType const &_Arg);
 
-		inline bool f_AppendArgs();
+		bool f_AppendArgs();
 
 		template <typename tf_CFirst, typename ...tfp_CArgs>
 		inline bool f_AppendArgs(tf_CFirst const &_First, tfp_CArgs const & ...p_Args);
@@ -230,7 +230,7 @@ namespace NMib::NDBus
 		template <typename tf_CType>
 		bool f_PopArg(tf_CType &o_Arg);
 
-		inline bool f_PopArgs();
+		bool f_PopArgs();
 
 		template <typename tf_CFirst, typename ...tfp_CArgs>
 		inline bool f_PopArgs(tf_CFirst &o_First, tfp_CArgs & ...po_Args);
@@ -337,17 +337,6 @@ namespace NMib::NDBus
 		friend CConnection;
 	};
 
-	//
-	// CMessageWriter Implementation
-	//
-
-	template <typename tf_CType>
-	bool CMessageWriter::f_AppendArg(tf_CType const &_Arg)
-	{
-		static_assert(NTraits::cIsSame<tf_CType, void>, "This type is not supported");
-		return false;
-	}
-
 	template <>
 	bool CMessageWriter::f_AppendArg<uint8>(uint8 const &_Value);
 
@@ -386,28 +375,6 @@ namespace NMib::NDBus
 
 	template <>
 	bool CMessageWriter::f_AppendArg<NContainer::TCVector<NStr::CStr>>(NContainer::TCVector<NStr::CStr> const &_Value);
-
-	bool CMessageWriter::f_AppendArgs()
-	{
-		return true;
-	}
-
-	template <typename tf_CFirst, typename ...tfp_CArgs>
-	bool CMessageWriter::f_AppendArgs(tf_CFirst const &_First, tfp_CArgs const & ...p_Args)
-	{
-		return f_AppendArg<tf_CFirst>(_First) && f_AppendArgs(p_Args...);
-	}
-
-	//
-	// CMessageReader Implementation
-	//
-
-	template <typename tf_CType>
-	bool CMessageReader::f_PopArg(tf_CType &o_Arg)
-	{
-		static_assert(NTraits::cIsSame<tf_CType, void>, "This type is not supported");
-		return false;
-	}
 
 	template <>
 	bool CMessageReader::f_PopArg<uint8>(uint8 &o_Value);
@@ -453,15 +420,6 @@ namespace NMib::NDBus
 
 	template <>
 	bool CMessageReader::f_PopArg<CDBusUInt64DictDict>(CDBusUInt64DictDict &o_Value);
-
-	bool CMessageReader::f_PopArgs()
-	{
-		return true;
-	}
-
-	template <typename tf_CFirst, typename ...tfp_CArgs>
-	bool CMessageReader::f_PopArgs(tf_CFirst &o_First, tfp_CArgs & ...po_Args)
-	{
-		return f_PopArg(o_First) && f_PopArgs(po_Args...);
-	}
 }
+
+#include "Malterlib_Desktop_PlatformImp_Linux_DBus.hpp"
