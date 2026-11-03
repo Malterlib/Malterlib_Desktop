@@ -5,9 +5,8 @@
 
 namespace NMib::NDesktop
 {
-	class CDesktopFileParser
+	struct CDesktopFileParser
 	{
-	public:
 		CDesktopFileParser(NStr::CStr const &_Identifier, NStr::CStr const &_Path);
 		~CDesktopFileParser();
 

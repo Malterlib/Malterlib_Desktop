@@ -151,26 +151,14 @@ namespace NMib::NDBus
 		, EMessageType_Error
 	};
 
-	class CMessageWriter;
-	class CMessageReader;
-	class CError;
-	class CConnection;
-	class CSystem;
+	struct CMessageWriter;
+	struct CMessageReader;
+	struct CError;
+	struct CConnection;
+	struct CSystem;
 
-	class CMessage
+	struct CMessage
 	{
-	private:
-		CDBusLibrary &mp_Lib;
-		DBusMessage *mp_pMsg;
-
-		friend CMessageReader;
-		friend CMessageWriter;
-		friend CConnection;
-
-		CMessage(DBusMessage *_pMsg, CSystem &_System);
-		CMessage(DBusMessage *_pMsg, CDBusLibrary &_Lib);
-
-	public:
 		// Only to be used for replies.
 		CMessage(CSystem &_System);
 
@@ -203,15 +191,21 @@ namespace NMib::NDBus
 		char const *f_GetPath() const;
 
 		void f_SetSerial(uint32 _Serial); // Only used for testing, to pretend to have been sent.
+
+	private:
+		CDBusLibrary &mp_Lib;
+		DBusMessage *mp_pMsg;
+
+		friend CMessageReader;
+		friend CMessageWriter;
+		friend CConnection;
+
+		CMessage(DBusMessage *_pMsg, CSystem &_System);
+		CMessage(DBusMessage *_pMsg, CDBusLibrary &_Lib);
 	};
 
-	class CMessageWriter
+	struct CMessageWriter
 	{
-	private:
-		struct CInternal;
-		NStorage::TCUniquePointer<CInternal> mp_pInternal;
-
-	public:
 		CMessageWriter(CMessage &_Message);
 		~CMessageWriter();
 
@@ -222,15 +216,14 @@ namespace NMib::NDBus
 
 		template <typename t_CFirst, typename ...Args>
 		inline bool f_AppendArgs(t_CFirst const &_First, Args const & ..._Args);
-	};
 
-	class CMessageReader
-	{
 	private:
 		struct CInternal;
 		NStorage::TCUniquePointer<CInternal> mp_pInternal;
+	};
 
-	public:
+	struct CMessageReader
+	{
 		CMessageReader(CMessage const &_Message);
 		~CMessageReader();
 
@@ -243,19 +236,14 @@ namespace NMib::NDBus
 		inline bool f_PopArgs(t_CFirst &_First, Args & ..._Args);
 
 		bool f_ArgAvailable();
-	};
 
-	class CError
-	{
 	private:
 		struct CInternal;
 		NStorage::TCUniquePointer<CInternal> mp_pInternal;
+	};
 
-		friend CConnection;
-
-		CError(CDBusLibrary &_Lib);
-
-	public:
+	struct CError
+	{
 		CError(CSystem &_Sys);
 		CError(CError const &_ToCopy) = delete;
 		CError(CError &&_ToMove);
@@ -271,6 +259,14 @@ namespace NMib::NDBus
 		void f_Clear();
 
 		void f_Take(DBusError &_FromHere);
+
+	private:
+		struct CInternal;
+		NStorage::TCUniquePointer<CInternal> mp_pInternal;
+
+		friend CConnection;
+
+		CError(CDBusLibrary &_Lib);
 	};
 
 	static int const gc_DefaultTimeout = -1;
@@ -281,24 +277,8 @@ namespace NMib::NDBus
 		, EDBusBus_System // Machine specific bus
 	};
 
-	class CConnection
+	struct CConnection
 	{
-	private:
-		enum EFlag
-		{
-			EFlag_None      = 0
-			, EFlag_Private = DMibBit(0)
-		};
-
-	private:
-		CDBusLibrary &mp_Lib;
-		DBusConnection *mp_pConnection;
-		EFlag mp_Flags;
-		CError mp_LastError;
-
-		friend CSystem;
-
-	public:
 		CConnection(CSystem &_Sys);
 		~CConnection();
 
@@ -322,10 +302,32 @@ namespace NMib::NDBus
 		// Get the underlying Unix file descriptor for use with select()/poll()
 		// Returns -1 if not available
 		int f_GetUnixFd() const;
+
+	private:
+		enum EFlag
+		{
+			EFlag_None      = 0
+			, EFlag_Private = DMibBit(0)
+		};
+
+	private:
+		CDBusLibrary &mp_Lib;
+		DBusConnection *mp_pConnection;
+		EFlag mp_Flags;
+		CError mp_LastError;
+
+		friend CSystem;
 	};
 
-	class CSystem
+	struct CSystem
 	{
+		CSystem();
+		~CSystem();
+
+		bool f_ReadyForUse(); // f_IsOK will never return true until this has been called and returned true.
+
+		bool f_IsOK();
+
 	private:
 		NThread::CMutual mp_LibLock;
 		NStorage::TCUniquePointer<CDBusLibrary> mp_pLib;
@@ -333,14 +335,6 @@ namespace NMib::NDBus
 		friend CMessage;
 		friend CError;
 		friend CConnection;
-
-	public:
-		CSystem();
-		~CSystem();
-
-		bool f_ReadyForUse(); // f_IsOK will never return true until this has been called and returned true.
-
-		bool f_IsOK();
 	};
 
 	//

@@ -9,9 +9,8 @@ using namespace NMib;
 
 namespace
 {
-	class CDBus_Tests : public NMib::NTest::CTest
+	struct CDBus_Tests : public NMib::NTest::CTest
 	{
-	public:
 		void f_DoTests()
 		{
 			NDBus::CSystem DBus;
