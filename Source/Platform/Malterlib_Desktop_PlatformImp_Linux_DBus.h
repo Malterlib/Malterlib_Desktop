@@ -119,8 +119,8 @@ Usage:
 extern "C"
 {
 	typedef struct DBusMessage DBusMessage;
-	typedef struct DBusMessageIter DBusMessageIter;
-	typedef struct DBusError DBusError;
+	typedef struct DBusMessageIter DBusMessageIter; // NOLINT(malterlib-type-naming): the name in libdbus
+	typedef struct DBusError DBusError; // NOLINT(malterlib-type-naming): the name in libdbus
 	typedef struct DBusConnection DBusConnection;
 }
 
