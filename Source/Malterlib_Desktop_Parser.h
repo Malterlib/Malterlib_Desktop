@@ -7,9 +7,6 @@ namespace NMib::NDesktop
 {
 	struct CDesktopFileParser
 	{
-		CDesktopFileParser(NStr::CStr const &_Identifier, NStr::CStr const &_Path);
-		~CDesktopFileParser();
-
 		struct CDesktopAction
 		{
 			NStr::CStr m_Description;
@@ -20,13 +17,16 @@ namespace NMib::NDesktop
 
 		struct CDesktopGroup
 		{
-			NStr::CStr m_Name;
-			NContainer::TCMap<NStr::CStr, NStr::CStr> m_KeyValueMap;
-
 			void f_SetName(NStr::CStr const &_Name);
 			void f_SetValue(NStr::CStr const &_Key, NStr::CStr const &_Value);
 			void f_SetValue(NStr::CStr const &_Key, NContainer::TCVector<NStr::CStr> const &_Values);
+
+			NStr::CStr m_Name;
+			NContainer::TCMap<NStr::CStr, NStr::CStr> m_KeyValueMap;
 		};
+
+		CDesktopFileParser(NStr::CStr const &_Identifier, NStr::CStr const &_Path);
+		~CDesktopFileParser();
 
 		void f_SetIconPath(NStr::CStr const &_IconPath);
 		void f_SetExec(NStr::CStr const &_Exec);
