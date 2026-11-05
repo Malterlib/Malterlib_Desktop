@@ -15,10 +15,7 @@ namespace NMib::NDBus
 
 	struct CDBusLibrary final : public NMib::CDynamicLibraryUtility
 	{
-		constexpr CDBusLibrary()
-			: NMib::CDynamicLibraryUtility(NMib::NStr::gc_Str<"libdbus-1.so,libdbus-1.so.3">, EDLFlag_NoThrow)
-		{
-		}
+		constexpr CDBusLibrary();
 
 		decltype(&dbus_message_new_method_call) m_fDBusMessageNewMethodCall = nullptr;
 		decltype(&dbus_message_new_method_return) m_fDBusMessageNewMethodReturn = nullptr;
@@ -62,94 +59,102 @@ namespace NMib::NDBus
 		decltype(&dbus_connection_dispatch) m_fDBusConnectionDispatch = nullptr;
 
 	protected:
-		void fp_ClearSymbols() override
-		{
-			m_fDBusMessageNewMethodCall = nullptr;
-			m_fDBusMessageNewMethodReturn = nullptr;
-			m_fDBusMessageNewSignal = nullptr;
-			m_fDBusMessageNewError = nullptr;
-			m_fDBusMessageUnref = nullptr;
-			m_fDBusMessageCopy = nullptr;
-			m_fDBusMessageGetType = nullptr;
-			m_fDBusMessageIterInitAppend = nullptr;
-			m_fDBusMessageIterAppendBasic = nullptr;
-			m_fDBusMessageIterOpenContainer = nullptr;
-			m_fDBusMessageIterAppendFixedArray = nullptr;
-			m_fDBusMessageIterCloseContainer = nullptr;
-			m_fDBusMessageIterInit = nullptr;
-			m_fDBusMessageIterGetArgType = nullptr;
-			m_fDBusMessageIterGetBasic = nullptr;
-			m_fDBusMessageIterNext = nullptr;
-			m_fDBusMessageIterGetElementType = nullptr;
-			m_fDBusMessageIterGetFixedArray = nullptr;
-			m_fDBusMessageIterRecurse = nullptr;
-			m_fDBusMessageIterHasNext = nullptr;
-			m_fDBusMessageSetSerial = nullptr;
-			m_fDBusErrorInit = nullptr;
-			m_fDBusErrorFree = nullptr;
-			m_fDBusErrorIsSet = nullptr;
-			m_fDBusMoveError = nullptr;
-			m_fDBusConnectionOpen = nullptr;
-			m_fDBusConnectionOpenPrivate = nullptr;
-			m_fDBusConnectionSendWithReplyAndBlock = nullptr;
-			m_fDBusConnectionGetIsConnected = nullptr;
-			m_fDBusConnectionClose = nullptr;
-			m_fDBusConnectionUnref = nullptr;
-			m_fDBusBusGet = nullptr;
-			m_fDBusBusAddMatch = nullptr;
-			m_fDBusConnectionReadWrite = nullptr;
-			m_fDBusConnectionPopMessage = nullptr;
-			m_fDBusMessageGetInterface = nullptr;
-			m_fDBusMessageGetMember = nullptr;
-			m_fDBusMessageGetPath = nullptr;
-			m_fDBusConnectionGetUnixFD = nullptr;
-			m_fDBusConnectionDispatch = nullptr;
-		}
-
-		void fp_FetchSymbols() override
-		{
-			fp_Fetch(m_fDBusMessageNewMethodCall, "dbus_message_new_method_call");
-			fp_Fetch(m_fDBusMessageNewMethodReturn, "dbus_message_new_method_return");
-			fp_Fetch(m_fDBusMessageNewSignal, "dbus_message_new_signal");
-			fp_Fetch(m_fDBusMessageNewError, "dbus_message_new_error");
-			fp_Fetch(m_fDBusMessageUnref, "dbus_message_unref");
-			fp_Fetch(m_fDBusMessageCopy, "dbus_message_copy");
-			fp_Fetch(m_fDBusMessageGetType, "dbus_message_get_type");
-			fp_Fetch(m_fDBusMessageIterInitAppend, "dbus_message_iter_init_append");
-			fp_Fetch(m_fDBusMessageIterAppendBasic, "dbus_message_iter_append_basic");
-			fp_Fetch(m_fDBusMessageIterOpenContainer, "dbus_message_iter_open_container");
-			fp_Fetch(m_fDBusMessageIterAppendFixedArray, "dbus_message_iter_append_fixed_array");
-			fp_Fetch(m_fDBusMessageIterCloseContainer, "dbus_message_iter_close_container");
-			fp_Fetch(m_fDBusMessageIterInit, "dbus_message_iter_init");
-			fp_Fetch(m_fDBusMessageIterGetArgType, "dbus_message_iter_get_arg_type");
-			fp_Fetch(m_fDBusMessageIterGetBasic, "dbus_message_iter_get_basic");
-			fp_Fetch(m_fDBusMessageIterNext, "dbus_message_iter_next");
-			fp_Fetch(m_fDBusMessageIterGetElementType, "dbus_message_iter_get_element_type");
-			fp_Fetch(m_fDBusMessageIterGetFixedArray, "dbus_message_iter_get_fixed_array");
-			fp_Fetch(m_fDBusMessageIterRecurse, "dbus_message_iter_recurse");
-			fp_Fetch(m_fDBusMessageIterHasNext, "dbus_message_iter_has_next");
-			fp_Fetch(m_fDBusMessageSetSerial, "dbus_message_set_serial");
-			fp_Fetch(m_fDBusErrorInit, "dbus_error_init");
-			fp_Fetch(m_fDBusErrorFree, "dbus_error_free");
-			fp_Fetch(m_fDBusErrorIsSet, "dbus_error_is_set");
-			fp_Fetch(m_fDBusMoveError, "dbus_move_error");
-			fp_Fetch(m_fDBusConnectionOpen, "dbus_connection_open");
-			fp_Fetch(m_fDBusConnectionOpenPrivate, "dbus_connection_open_private");
-			fp_Fetch(m_fDBusConnectionSendWithReplyAndBlock, "dbus_connection_send_with_reply_and_block");
-			fp_Fetch(m_fDBusConnectionGetIsConnected, "dbus_connection_get_is_connected");
-			fp_Fetch(m_fDBusConnectionClose, "dbus_connection_close");
-			fp_Fetch(m_fDBusConnectionUnref, "dbus_connection_unref");
-			fp_Fetch(m_fDBusBusGet, "dbus_bus_get");
-			fp_Fetch(m_fDBusBusAddMatch, "dbus_bus_add_match");
-			fp_Fetch(m_fDBusConnectionReadWrite, "dbus_connection_read_write");
-			fp_Fetch(m_fDBusConnectionPopMessage, "dbus_connection_pop_message");
-			fp_Fetch(m_fDBusMessageGetInterface, "dbus_message_get_interface");
-			fp_Fetch(m_fDBusMessageGetMember, "dbus_message_get_member");
-			fp_Fetch(m_fDBusMessageGetPath, "dbus_message_get_path");
-			fp_Fetch(m_fDBusConnectionGetUnixFD, "dbus_connection_get_unix_fd");
-			fp_Fetch(m_fDBusConnectionDispatch, "dbus_connection_dispatch");
-		}
+		void fp_ClearSymbols() override;
+		void fp_FetchSymbols() override;
 	};
+
+	constexpr CDBusLibrary::CDBusLibrary()
+		: NMib::CDynamicLibraryUtility(NMib::NStr::gc_Str<"libdbus-1.so,libdbus-1.so.3">, EDLFlag_NoThrow)
+	{
+	}
+
+	void CDBusLibrary::fp_ClearSymbols()
+	{
+		m_fDBusMessageNewMethodCall = nullptr;
+		m_fDBusMessageNewMethodReturn = nullptr;
+		m_fDBusMessageNewSignal = nullptr;
+		m_fDBusMessageNewError = nullptr;
+		m_fDBusMessageUnref = nullptr;
+		m_fDBusMessageCopy = nullptr;
+		m_fDBusMessageGetType = nullptr;
+		m_fDBusMessageIterInitAppend = nullptr;
+		m_fDBusMessageIterAppendBasic = nullptr;
+		m_fDBusMessageIterOpenContainer = nullptr;
+		m_fDBusMessageIterAppendFixedArray = nullptr;
+		m_fDBusMessageIterCloseContainer = nullptr;
+		m_fDBusMessageIterInit = nullptr;
+		m_fDBusMessageIterGetArgType = nullptr;
+		m_fDBusMessageIterGetBasic = nullptr;
+		m_fDBusMessageIterNext = nullptr;
+		m_fDBusMessageIterGetElementType = nullptr;
+		m_fDBusMessageIterGetFixedArray = nullptr;
+		m_fDBusMessageIterRecurse = nullptr;
+		m_fDBusMessageIterHasNext = nullptr;
+		m_fDBusMessageSetSerial = nullptr;
+		m_fDBusErrorInit = nullptr;
+		m_fDBusErrorFree = nullptr;
+		m_fDBusErrorIsSet = nullptr;
+		m_fDBusMoveError = nullptr;
+		m_fDBusConnectionOpen = nullptr;
+		m_fDBusConnectionOpenPrivate = nullptr;
+		m_fDBusConnectionSendWithReplyAndBlock = nullptr;
+		m_fDBusConnectionGetIsConnected = nullptr;
+		m_fDBusConnectionClose = nullptr;
+		m_fDBusConnectionUnref = nullptr;
+		m_fDBusBusGet = nullptr;
+		m_fDBusBusAddMatch = nullptr;
+		m_fDBusConnectionReadWrite = nullptr;
+		m_fDBusConnectionPopMessage = nullptr;
+		m_fDBusMessageGetInterface = nullptr;
+		m_fDBusMessageGetMember = nullptr;
+		m_fDBusMessageGetPath = nullptr;
+		m_fDBusConnectionGetUnixFD = nullptr;
+		m_fDBusConnectionDispatch = nullptr;
+	}
+
+	void CDBusLibrary::fp_FetchSymbols()
+	{
+		fp_Fetch(m_fDBusMessageNewMethodCall, "dbus_message_new_method_call");
+		fp_Fetch(m_fDBusMessageNewMethodReturn, "dbus_message_new_method_return");
+		fp_Fetch(m_fDBusMessageNewSignal, "dbus_message_new_signal");
+		fp_Fetch(m_fDBusMessageNewError, "dbus_message_new_error");
+		fp_Fetch(m_fDBusMessageUnref, "dbus_message_unref");
+		fp_Fetch(m_fDBusMessageCopy, "dbus_message_copy");
+		fp_Fetch(m_fDBusMessageGetType, "dbus_message_get_type");
+		fp_Fetch(m_fDBusMessageIterInitAppend, "dbus_message_iter_init_append");
+		fp_Fetch(m_fDBusMessageIterAppendBasic, "dbus_message_iter_append_basic");
+		fp_Fetch(m_fDBusMessageIterOpenContainer, "dbus_message_iter_open_container");
+		fp_Fetch(m_fDBusMessageIterAppendFixedArray, "dbus_message_iter_append_fixed_array");
+		fp_Fetch(m_fDBusMessageIterCloseContainer, "dbus_message_iter_close_container");
+		fp_Fetch(m_fDBusMessageIterInit, "dbus_message_iter_init");
+		fp_Fetch(m_fDBusMessageIterGetArgType, "dbus_message_iter_get_arg_type");
+		fp_Fetch(m_fDBusMessageIterGetBasic, "dbus_message_iter_get_basic");
+		fp_Fetch(m_fDBusMessageIterNext, "dbus_message_iter_next");
+		fp_Fetch(m_fDBusMessageIterGetElementType, "dbus_message_iter_get_element_type");
+		fp_Fetch(m_fDBusMessageIterGetFixedArray, "dbus_message_iter_get_fixed_array");
+		fp_Fetch(m_fDBusMessageIterRecurse, "dbus_message_iter_recurse");
+		fp_Fetch(m_fDBusMessageIterHasNext, "dbus_message_iter_has_next");
+		fp_Fetch(m_fDBusMessageSetSerial, "dbus_message_set_serial");
+		fp_Fetch(m_fDBusErrorInit, "dbus_error_init");
+		fp_Fetch(m_fDBusErrorFree, "dbus_error_free");
+		fp_Fetch(m_fDBusErrorIsSet, "dbus_error_is_set");
+		fp_Fetch(m_fDBusMoveError, "dbus_move_error");
+		fp_Fetch(m_fDBusConnectionOpen, "dbus_connection_open");
+		fp_Fetch(m_fDBusConnectionOpenPrivate, "dbus_connection_open_private");
+		fp_Fetch(m_fDBusConnectionSendWithReplyAndBlock, "dbus_connection_send_with_reply_and_block");
+		fp_Fetch(m_fDBusConnectionGetIsConnected, "dbus_connection_get_is_connected");
+		fp_Fetch(m_fDBusConnectionClose, "dbus_connection_close");
+		fp_Fetch(m_fDBusConnectionUnref, "dbus_connection_unref");
+		fp_Fetch(m_fDBusBusGet, "dbus_bus_get");
+		fp_Fetch(m_fDBusBusAddMatch, "dbus_bus_add_match");
+		fp_Fetch(m_fDBusConnectionReadWrite, "dbus_connection_read_write");
+		fp_Fetch(m_fDBusConnectionPopMessage, "dbus_connection_pop_message");
+		fp_Fetch(m_fDBusMessageGetInterface, "dbus_message_get_interface");
+		fp_Fetch(m_fDBusMessageGetMember, "dbus_message_get_member");
+		fp_Fetch(m_fDBusMessageGetPath, "dbus_message_get_path");
+		fp_Fetch(m_fDBusConnectionGetUnixFD, "dbus_connection_get_unix_fd");
+		fp_Fetch(m_fDBusConnectionDispatch, "dbus_connection_dispatch");
+	}
 
 	//
 	// CMessage
@@ -328,14 +333,16 @@ namespace NMib::NDBus
 
 	struct CMessageWriter::CInternal
 	{
-		CInternal(CMessage &_Message)
-			: m_Lib(_Message.mp_Lib)
-		{
-		}
+		CInternal(CMessage &_Message);
 
 		CDBusLibrary &m_Lib;
 		DBusMessageIter m_Iter;
 	};
+
+	CMessageWriter::CInternal::CInternal(CMessage &_Message)
+		: m_Lib(_Message.mp_Lib)
+	{
+	}
 
 	CMessageWriter::CMessageWriter(CMessage &_Message)
 		: mp_pInternal(fg_Construct(_Message))
@@ -485,14 +492,16 @@ namespace NMib::NDBus
 
 	struct CMessageReader::CInternal
 	{
-		CInternal(CMessage const &_Message)
-			: m_Lib(_Message.mp_Lib)
-		{
-		}
+		CInternal(CMessage const &_Message);
 
 		CDBusLibrary &m_Lib;
 		DBusMessageIter m_Iter;
 	};
+
+	CMessageReader::CInternal::CInternal(CMessage const &_Message)
+		: m_Lib(_Message.mp_Lib)
+	{
+	}
 
 	CMessageReader::CMessageReader(CMessage const &_Message)
 		: mp_pInternal(fg_Construct(_Message))
@@ -935,14 +944,16 @@ namespace NMib::NDBus
 
 	struct CError::CInternal
 	{
-		CInternal(CDBusLibrary &_Lib)
-			: m_Lib(_Lib)
-		{
-		}
+		CInternal(CDBusLibrary &_Lib);
 
 		CDBusLibrary &m_Lib;
 		DBusError m_Error;
 	};
+
+	CError::CInternal::CInternal(CDBusLibrary &_Lib)
+		: m_Lib(_Lib)
+	{
+	}
 
 	CError::CError(CSystem &_Sys)
 		: mp_pInternal(fg_Construct(*_Sys.mp_pLib))

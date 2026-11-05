@@ -193,15 +193,15 @@ namespace NMib::NDBus
 		void f_SetSerial(uint32 _Serial); // Only used for testing, to pretend to have been sent.
 
 	private:
-		CDBusLibrary &mp_Lib;
-		DBusMessage *mp_pMsg;
-
 		friend CMessageReader;
 		friend CMessageWriter;
 		friend CConnection;
 
 		CMessage(DBusMessage *_pMsg, CSystem &_System);
 		CMessage(DBusMessage *_pMsg, CDBusLibrary &_Lib);
+
+		CDBusLibrary &mp_Lib;
+		DBusMessage *mp_pMsg;
 	};
 
 	struct CMessageWriter
@@ -261,12 +261,13 @@ namespace NMib::NDBus
 		void f_Take(DBusError &_FromHere);
 
 	private:
-		struct CInternal;
-		NStorage::TCUniquePointer<CInternal> mp_pInternal;
-
 		friend CConnection;
 
+		struct CInternal;
+
 		CError(CDBusLibrary &_Lib);
+
+		NStorage::TCUniquePointer<CInternal> mp_pInternal;
 	};
 
 	constexpr int gc_DefaultTimeout = -1;
@@ -304,19 +305,18 @@ namespace NMib::NDBus
 		int f_GetUnixFd() const;
 
 	private:
+		friend CSystem;
+
 		enum EFlag
 		{
 			EFlag_None      = 0
 			, EFlag_Private = DMibBit(0)
 		};
 
-	private:
 		CDBusLibrary &mp_Lib;
 		DBusConnection *mp_pConnection;
 		EFlag mp_Flags;
 		CError mp_LastError;
-
-		friend CSystem;
 	};
 
 	struct CSystem
@@ -329,12 +329,12 @@ namespace NMib::NDBus
 		bool f_IsOK();
 
 	private:
-		NThread::CMutual mp_LibLock;
-		NStorage::TCUniquePointer<CDBusLibrary> mp_pLib;
-
 		friend CMessage;
 		friend CError;
 		friend CConnection;
+
+		NThread::CMutual mp_LibLock;
+		NStorage::TCUniquePointer<CDBusLibrary> mp_pLib;
 	};
 
 	template <>
